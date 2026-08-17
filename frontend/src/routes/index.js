@@ -14,74 +14,74 @@ import DetailsOrderPage from "../pages/DetailsOrderPage/DetailsOrderPage";
 import NewsPage from "../pages/NewsPage/NewsPage";
 
 export const routes = [
-    {
-        path: '/',
-        page: HomePage,
-        isShowHeader: true
-    },
-    {
-        path: '/order',
-        page: OrderPage,
-        isShowHeader: true
-    },
-    {
-        path: '/my-order',
-        page: MyOrderPage,
-        isShowHeader: true
-    },
-    {
-        path: '/details-order/:id',
-        page: DetailsOrderPage,
-        isShowHeader: true
-    },
-    {
-        path: '/payment',
-        page: PaymentPage,
-        isShowHeader: true
-    },
-    {
-        path: '/orderSuccess',
-        page: OrderSuccess,
-        isShowHeader: true
-    },
-    {
-        path: '/product/:type',
-        page: TypeProductPage,
-        isShowHeader: true
-    },
-    {
-        path: '/news',
-        page: NewsPage,
-        isShowHeader: true
-    },
-    {
-        path: '/sign-in',
-        page: SignInPage,
-        isShowHeader: false
-    },
-    {
-        path: '/sign-up',
-        page: SignUpPage,
-        isShowHeader: false
-    },
-    {
-        path: '/product-details/:id',
-        page: ProductDetailsPage,
-        isShowHeader: true
-    },
-    {
-        path: '/profile-user',
-        page: ProfilePage,
-        isShowHeader: true
-    },
-    {
-        path: '/system/admin',
-        page: AdminPage,
-        isShowHeader: false,
-        isPrivated: true
-    },
-    {
-        path: '*',
-        page: NotFoundPage
-    },
-]
+  {
+    path: "/",
+    page: HomePage,
+    isShowHeader: true,
+  },
+  {
+    path: "/order",
+    page: OrderPage,
+    isShowHeader: true,
+  },
+  {
+    path: "/my-order",
+    page: MyOrderPage,
+    isShowHeader: true,
+  },
+  {
+    path: "/details-order/:id",
+    page: DetailsOrderPage,
+    isShowHeader: true,
+  },
+  {
+    path: "/payment",
+    page: PaymentPage,
+    isShowHeader: true,
+  },
+  {
+    path: "/orderSuccess",
+    page: OrderSuccess,
+    isShowHeader: true,
+  },
+  {
+    path: "/product/:type",
+    page: TypeProductPage,
+    isShowHeader: true,
+  },
+  {
+    path: "/news",
+    page: NewsPage,
+    isShowHeader: true,
+  },
+  {
+    path: "/sign-in",
+    page: SignInPage,
+    isShowHeader: false,
+  },
+  {
+    path: "/sign-up",
+    page: SignUpPage,
+    isShowHeader: false,
+  },
+  {
+    path: "/product-details/:id",
+    page: ProductDetailsPage,
+    isShowHeader: true,
+  },
+  {
+    path: "/profile-user",
+    page: ProfilePage,
+    isShowHeader: true,
+  },
+  {
+    path: "/system/admin",
+    page: AdminPage,
+    isShowHeader: false,
+    isPrivated: true,
+  },
+  {
+    path: "*",
+    page: NotFoundPage,
+  },
+];
