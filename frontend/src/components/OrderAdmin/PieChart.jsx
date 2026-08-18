@@ -1,18 +1,33 @@
-import React, { PureComponent } from 'react'
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
-import { convertDataChart } from '../../utils';
+import React, { PureComponent } from "react";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import { convertDataChart } from "../../utils";
 
 const PieChartComponent = (props) => {
-  const data = convertDataChart(props.data, 'paymentMethod')
-  const COLORS = ['rgb(110, 186, 252)', '#00C49F', '#FFBB28', '#FF8042'];
+  const data = convertDataChart(props.data, "paymentMethod");
+  const COLORS = ["rgb(110, 186, 252)", "#00C49F", "#FFBB28", "#FF8042"];
 
   const RADIAN = Math.PI / 180;
-  const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index, ...rests }) => {
+  const renderCustomizedLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    percent,
+    index,
+    ...rests
+  }) => {
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
     return (
-      <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+      <text
+        x={x}
+        y={y}
+        fill="white"
+        textAnchor={x > cx ? "start" : "end"}
+        dominantBaseline="central"
+      >
         {`${(percent * 100).toFixed(0)}%`}
       </text>
     );
@@ -38,7 +53,7 @@ const PieChartComponent = (props) => {
         <Tooltip />
       </PieChart>
     </ResponsiveContainer>
-  )
-}
+  );
+};
 
-export default PieChartComponent
+export default PieChartComponent;
