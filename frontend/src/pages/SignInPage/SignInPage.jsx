@@ -1,5 +1,17 @@
 import React, { useEffect, useState } from "react";
 import {
+  BrandDescription,
+  BrandEyebrow,
+  BrandMark,
+  BrandTitle,
+  FieldGroup,
+  FieldLabel,
+  FormFooter,
+  FormSubtitle,
+  FormTitle,
+  PasswordField,
+  SignInCard,
+  SignInPageWrapper,
   WrapperContainerLeft,
   WrapperContainerRight,
   WrapperTextLight,
@@ -8,7 +20,12 @@ import InputForm from "../../components/InputForm/InputForm";
 import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import imageLogin from "../../assets/images/logo-login.png";
 import { Image } from "antd";
-import { EyeFilled, EyeInvisibleFilled } from "@ant-design/icons";
+import {
+  EyeFilled,
+  EyeInvisibleFilled,
+  LockOutlined,
+  MailOutlined,
+} from "@ant-design/icons";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as UserService from "../../services/UserService";
 import { useMutationHooks } from "../../hooks/useMutationHook";
@@ -69,52 +86,47 @@ const SignInPage = () => {
     });
   };
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "rgb(0, 0, 0, 0.53)",
-        height: "100vh",
-      }}
-    >
-      <div
-        style={{
-          width: "800px",
-          height: "445px",
-          borderRadius: "6px",
-          background: "#fff",
-          display: "flex",
-        }}
-      >
+    <SignInPageWrapper>
+      <SignInCard>
         <WrapperContainerLeft>
-          <h1>Xin chào</h1>
-          <p>Đăng nhập vào tài khoản</p>
-          <InputForm
-            style={{ marginBottom: "10px" }}
-            placeholder="Abc@gmail.com"
-            value={email}
-            onChange={handleOnchangeEmail}
-          />
-          <div style={{ position: "relative" }}>
-            <span
-              onClick={() => setIsShowPassword(!isShowPassword)}
-              style={{
-                zIndex: 10,
-                position: "absolute",
-                top: "4px",
-                right: "8px",
-              }}
-            >
-              {isShowPassword ? <EyeFilled /> : <EyeInvisibleFilled />}
-            </span>
+          <BrandEyebrow>Phone Plaza</BrandEyebrow>
+          <FormTitle>Chào mừng trở lại</FormTitle>
+          <FormSubtitle>
+            Đăng nhập để tiếp tục trải nghiệm mua sắm của bạn.
+          </FormSubtitle>
+          <FieldGroup>
+            <FieldLabel htmlFor="email">Email</FieldLabel>
             <InputForm
-              placeholder="Mật khẩu"
-              type={isShowPassword ? "text" : "password"}
-              value={password}
-              onChange={handleOnchangePassword}
+              id="email"
+              size="large"
+              prefix={<MailOutlined />}
+              placeholder="name@example.com"
+              value={email}
+              onChange={handleOnchangeEmail}
             />
-          </div>
+          </FieldGroup>
+          <FieldGroup>
+            <FieldLabel htmlFor="password">Mật khẩu</FieldLabel>
+            <PasswordField>
+              <InputForm
+                id="password"
+                size="large"
+                prefix={<LockOutlined />}
+                placeholder="Nhập mật khẩu"
+                type={isShowPassword ? "text" : "password"}
+                value={password}
+                onChange={handleOnchangePassword}
+              />
+              <button
+                type="button"
+                className="password-toggle"
+                aria-label={isShowPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+                onClick={() => setIsShowPassword(!isShowPassword)}
+              >
+                {isShowPassword ? <EyeFilled /> : <EyeInvisibleFilled />}
+              </button>
+            </PasswordField>
+          </FieldGroup>
           {data?.status === "ERR" && (
             <span style={{ color: "red" }}>{data?.message}</span>
           )}
@@ -124,12 +136,13 @@ const SignInPage = () => {
               onClick={handleSignIn}
               size={40}
               styleButton={{
-                background: "-webkit-linear-gradient(top, #f59000, #fd6e1d)",
-                height: "48px",
+                background: "#0d6b68",
+                height: "50px",
                 width: "100%",
                 border: "none",
-                borderRadius: "4px",
-                margin: "26px 0 10px",
+                borderRadius: "8px",
+                margin: "14px 0 20px",
+                boxShadow: "0 10px 18px rgba(13, 107, 104, 0.2)",
               }}
               textbutton={"Đăng nhập"}
               styletextbutton={{
@@ -139,28 +152,33 @@ const SignInPage = () => {
               }}
             ></ButtonComponent>
           </Loading>
-          <p>
-            <WrapperTextLight>Quên mật khẩu?</WrapperTextLight>
-          </p>
-          <p>
-            Chưa có tài khoản?{" "}
+          <FormFooter>
+            <span>Bạn chưa có tài khoản?</span>
             <WrapperTextLight onClick={handleNavigateSignUp}>
               Tạo tài khoản
             </WrapperTextLight>
+          </FormFooter>
+          <p style={{ margin: "28px 0 0", textAlign: "center" }}>
+            <WrapperTextLight>Quên mật khẩu?</WrapperTextLight>
           </p>
         </WrapperContainerLeft>
         <WrapperContainerRight>
-          <Image
-            src={imageLogin}
-            preview={false}
-            alt="image-login"
-            height="203px"
-            width="203px"
-          />
-          <h4>Mua sắm tại Phone Plaza</h4>
+          <BrandMark>
+            <Image
+              src={imageLogin}
+              preview={false}
+              alt="Phone Plaza"
+              height="118px"
+              width="118px"
+            />
+          </BrandMark>
+          <BrandTitle>Mua sắm thông minh</BrandTitle>
+          <BrandDescription>
+            Khám phá những sản phẩm công nghệ mới nhất dành riêng cho bạn.
+          </BrandDescription>
         </WrapperContainerRight>
-      </div>
-    </div>
+      </SignInCard>
+    </SignInPageWrapper>
   );
 };
 
