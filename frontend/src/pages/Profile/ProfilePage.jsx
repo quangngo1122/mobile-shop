@@ -1,13 +1,32 @@
 import React, { useEffect, useState } from "react";
 import {
-  WrapperContentProfile,
+  AddressSection,
+  AvatarFrame,
+  AvatarHint,
+  AvatarImage,
+  AvatarPlaceholder,
+  FormActions,
+  FormField,
+  FormGrid,
+  FormSectionTitle,
+  PageEyebrow,
+  PageSubtitle,
+  PageTitle,
+  ProfileAside,
+  ProfileContent,
+  ProfileEmail,
+  ProfileForm,
+  ProfileName,
+  ProfilePageWrapper,
+  ProfileShell,
+  SaveButton,
+  StatusMessage,
   WrapperHeader,
   WrapperInput,
   WrapperLabel,
   WrapperUploadFile,
 } from "./style";
 import InputForm from "../../components/InputForm/InputForm";
-import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import { useDispatch, useSelector } from "react-redux";
 import * as UserService from "../../services/UserService";
 import { useMutationHooks } from "../../hooks/useMutationHook";
@@ -15,7 +34,14 @@ import Loading from "../../components/LoadingComponent/Loading";
 import * as message from "../../components/Message/Message";
 import { updateUser } from "../../redux/slides/userSlide";
 import { Button } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import {
+  EnvironmentOutlined,
+  HomeOutlined,
+  MailOutlined,
+  PhoneOutlined,
+  UploadOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import { getBase64 } from "../../utils";
 
 const ProfilePage = () => {
@@ -92,174 +118,123 @@ const ProfilePage = () => {
     });
   };
   return (
-    <div style={{ width: "1080px", margin: "0 auto", height: "500px" }}>
-      <WrapperHeader>Thông tin người dùng</WrapperHeader>
-      <Loading isPending={isPending}>
-        <WrapperContentProfile>
-          <WrapperInput>
-            <WrapperLabel htmlFor="avatar">Ảnh đại diện</WrapperLabel>
-            {avatar && (
-              <img
-                src={avatar}
-                style={{
-                  height: "150px",
-                  width: "150px",
-                  borderRadius: "50%",
-                  objectFit: "cover",
-                  marginRight: "20px",
-                }}
-                alt="avatar"
-              />
-            )}
-            <WrapperUploadFile onChange={handleOnchangeAvatar} maxCount={1}>
-              <Button icon={<UploadOutlined />}>Chọn file</Button>
-            </WrapperUploadFile>
-
-            <ButtonComponent
-              onClick={handleUpdate}
-              size={40}
-              styleButton={{
-                height: "30px",
-                width: "fit-content",
-                borderRadius: "4px",
-                padding: "4px 6px 6px",
-              }}
-              textbutton={"Cập nhật"}
-              styletextbutton={{
-                color: "rgb(26, 148, 255)",
-                fontSize: "15px",
-                fontWeight: "700",
-              }}
-            ></ButtonComponent>
-          </WrapperInput>
-          <WrapperInput>
-            <WrapperLabel htmlFor="name">Tên</WrapperLabel>
-            <InputForm
-              style={{ width: "300px" }}
-              id="name"
-              value={name}
-              onChange={handleOnchangeName}
-            />
-            <ButtonComponent
-              onClick={handleUpdate}
-              size={40}
-              styleButton={{
-                height: "30px",
-                width: "fit-content",
-                borderRadius: "4px",
-                padding: "4px 6px 6px",
-              }}
-              textbutton={"Cập nhật"}
-              styletextbutton={{
-                color: "rgb(26, 148, 255)",
-                fontSize: "15px",
-                fontWeight: "700",
-              }}
-            ></ButtonComponent>
-          </WrapperInput>
-          <WrapperInput>
-            <WrapperLabel htmlFor="email">Email</WrapperLabel>
-            <InputForm
-              style={{ width: "300px" }}
-              id="email"
-              value={email}
-              onChange={handleOnchangeEmail}
-            />
-            <ButtonComponent
-              onClick={handleUpdate}
-              size={40}
-              styleButton={{
-                height: "30px",
-                width: "fit-content",
-                borderRadius: "4px",
-                padding: "4px 6px 6px",
-              }}
-              textbutton={"Cập nhật"}
-              styletextbutton={{
-                color: "rgb(26, 148, 255)",
-                fontSize: "15px",
-                fontWeight: "700",
-              }}
-            ></ButtonComponent>
-          </WrapperInput>
-          <WrapperInput>
-            <WrapperLabel htmlFor="phone">Số điện thoại</WrapperLabel>
-            <InputForm
-              style={{ width: "300px" }}
-              id="phone"
-              value={phone}
-              onChange={handleOnchangePhone}
-            />
-            <ButtonComponent
-              onClick={handleUpdate}
-              size={40}
-              styleButton={{
-                height: "30px",
-                width: "fit-content",
-                borderRadius: "4px",
-                padding: "4px 6px 6px",
-              }}
-              textbutton={"Cập nhật"}
-              styletextbutton={{
-                color: "rgb(26, 148, 255)",
-                fontSize: "15px",
-                fontWeight: "700",
-              }}
-            ></ButtonComponent>
-          </WrapperInput>
-          <WrapperInput>
-            <WrapperLabel htmlFor="address">Địa chỉ</WrapperLabel>
-            <InputForm
-              style={{ width: "300px" }}
-              id="address"
-              value={address}
-              onChange={handleOnchangeAddress}
-            />
-            <ButtonComponent
-              onClick={handleUpdate}
-              size={40}
-              styleButton={{
-                height: "30px",
-                width: "fit-content",
-                borderRadius: "4px",
-                padding: "4px 6px 6px",
-              }}
-              textbutton={"Cập nhật"}
-              styletextbutton={{
-                color: "rgb(26, 148, 255)",
-                fontSize: "15px",
-                fontWeight: "700",
-              }}
-            ></ButtonComponent>
-          </WrapperInput>
-          <WrapperInput>
-            <WrapperLabel htmlFor="city">Thành Phố</WrapperLabel>
-            <InputForm
-              style={{ width: "300px" }}
-              id="city"
-              value={city}
-              onChange={handleOnchangeCity}
-            />
-            <ButtonComponent
-              onClick={handleUpdate}
-              size={40}
-              styleButton={{
-                height: "30px",
-                width: "fit-content",
-                borderRadius: "4px",
-                padding: "4px 6px 6px",
-              }}
-              textbutton={"Cập nhật"}
-              styletextbutton={{
-                color: "rgb(26, 148, 255)",
-                fontSize: "15px",
-                fontWeight: "700",
-              }}
-            ></ButtonComponent>
-          </WrapperInput>
-        </WrapperContentProfile>
-      </Loading>
-    </div>
+    <ProfilePageWrapper>
+      <ProfileShell>
+        <WrapperHeader>
+          <PageEyebrow>Account settings</PageEyebrow>
+          <PageTitle>Thông tin cá nhân</PageTitle>
+          <PageSubtitle>
+            Quản lý thông tin để trải nghiệm mua sắm thuận tiện hơn.
+          </PageSubtitle>
+        </WrapperHeader>
+        <Loading isPending={isPending}>
+          <ProfileContent>
+            <ProfileAside>
+              <AvatarFrame>
+                {avatar ? (
+                  <AvatarImage src={avatar} alt="Ảnh đại diện" />
+                ) : (
+                  <AvatarPlaceholder>
+                    {(name || "P").charAt(0).toUpperCase()}
+                  </AvatarPlaceholder>
+                )}
+              </AvatarFrame>
+              <ProfileName>{name || "Thành viên Phone Plaza"}</ProfileName>
+              <ProfileEmail>{email || "Chưa cập nhật email"}</ProfileEmail>
+              <AvatarHint>
+                Cập nhật ảnh đại diện để hồ sơ của bạn trở nên nổi bật hơn.
+              </AvatarHint>
+              <WrapperUploadFile onChange={handleOnchangeAvatar} maxCount={1}>
+                <Button icon={<UploadOutlined />}>Đổi ảnh đại diện</Button>
+              </WrapperUploadFile>
+            </ProfileAside>
+            <ProfileForm>
+              <FormSectionTitle>Thông tin tài khoản</FormSectionTitle>
+              <FormGrid>
+                <FormField>
+                  <WrapperLabel htmlFor="name">
+                    <UserOutlined /> Tên hiển thị
+                  </WrapperLabel>
+                  <WrapperInput>
+                    <InputForm
+                      id="name"
+                      size="large"
+                      value={name}
+                      onChange={handleOnchangeName}
+                    />
+                  </WrapperInput>
+                </FormField>
+                <FormField>
+                  <WrapperLabel htmlFor="email">
+                    <MailOutlined /> Email
+                  </WrapperLabel>
+                  <WrapperInput>
+                    <InputForm
+                      id="email"
+                      size="large"
+                      value={email}
+                      onChange={handleOnchangeEmail}
+                    />
+                  </WrapperInput>
+                </FormField>
+                <FormField>
+                  <WrapperLabel htmlFor="phone">
+                    <PhoneOutlined /> Số điện thoại
+                  </WrapperLabel>
+                  <WrapperInput>
+                    <InputForm
+                      id="phone"
+                      size="large"
+                      value={phone}
+                      onChange={handleOnchangePhone}
+                    />
+                  </WrapperInput>
+                </FormField>
+              </FormGrid>
+              <AddressSection>
+                <FormSectionTitle>Địa chỉ giao hàng</FormSectionTitle>
+                <FormGrid>
+                  <FormField>
+                    <WrapperLabel htmlFor="address">
+                      <HomeOutlined /> Địa chỉ
+                    </WrapperLabel>
+                    <WrapperInput>
+                      <InputForm
+                        id="address"
+                        size="large"
+                        value={address}
+                        onChange={handleOnchangeAddress}
+                      />
+                    </WrapperInput>
+                  </FormField>
+                  <FormField>
+                    <WrapperLabel htmlFor="city">
+                      <EnvironmentOutlined /> Thành phố
+                    </WrapperLabel>
+                    <WrapperInput>
+                      <InputForm
+                        id="city"
+                        size="large"
+                        value={city}
+                        onChange={handleOnchangeCity}
+                      />
+                    </WrapperInput>
+                  </FormField>
+                </FormGrid>
+              </AddressSection>
+              {data?.status === "ERR" && (
+                <StatusMessage>{data?.message}</StatusMessage>
+              )}
+              <FormActions>
+                <SaveButton type="button" onClick={handleUpdate}>
+                  Lưu thay đổi
+                </SaveButton>
+              </FormActions>
+            </ProfileForm>
+          </ProfileContent>
+        </Loading>
+      </ProfileShell>
+    </ProfilePageWrapper>
   );
 };
 
