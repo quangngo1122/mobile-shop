@@ -6,8 +6,17 @@ const ProductDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   return (
-    <div style={{ width: "100%", background: "#efefef" }}>
-      <div style={{ width: "1024px", height: "100%", margin: "0 auto" }}>
+    <div
+      style={{
+        width: "100%",
+        minHeight: "100vh",
+        padding: "0 20px 48px",
+        background: "#f5f8f7",
+      }}
+    >
+      <div
+        style={{ width: "min(1180px, 100%)", height: "100%", margin: "0 auto" }}
+      >
         <h5
           style={{
             fontWeight: "400",

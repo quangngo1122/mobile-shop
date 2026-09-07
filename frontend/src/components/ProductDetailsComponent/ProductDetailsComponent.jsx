@@ -1,4 +1,4 @@
-import { Col, Image, Rate, Row } from "antd";
+import { Rate } from "antd";
 import React, { useEffect, useState } from "react";
 import imageProductSmall1 from "../../assets/images/iphone-16-pro-max-2.webp";
 import imageProductSmall2 from "../../assets/images/iphone-16-pro-max-3.webp";
@@ -7,7 +7,18 @@ import imageProductSmall4 from "../../assets/images/iphone-16-pro-max-5.webp";
 import imageProductSmall5 from "../../assets/images/iphone-16-pro-max-6.webp";
 import imageProductSmall6 from "../../assets/images/iphone-16-pro-max-7.webp";
 import {
-  WrapperAddressProduct,
+  CommentsSection,
+  DescriptionLabel,
+  ErrorLimit,
+  MainProductImage,
+  ProductDetailsShell,
+  ProductGallery,
+  ProductInfo,
+  ProductMeta,
+  ProductThumbnailList,
+  PurchasePanel,
+  QuantityButton,
+  QuantityLabel,
   WrapperInputNumber,
   WrapperPriceProduct,
   WrapperPriceTextProduct,
@@ -17,9 +28,9 @@ import {
   WrapperStyleImageSmall,
   WrapperStyleNameProduct,
   WrapperStyleTextSell,
+  BuyButton,
 } from "./style";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
-import ButtonComponent from "../ButtonComponent/ButtonComponent";
 import * as ProductService from "../../services/ProductService";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../LoadingComponent/Loading";
@@ -131,120 +142,62 @@ const ProductDetailsComponent = ({ idProduct }) => {
 
   return (
     <Loading isPending={isPending}>
-      <Row style={{ padding: "16px", background: "#fff", borderRadius: "4px" }}>
-        <Col
-          span={10}
-          style={{ borderRight: "1px solid #e5e5e5", paddingRight: "8px" }}
-        >
-          <Image
-            style={{ paddingLeft: "20px" }}
+      <ProductDetailsShell>
+        <ProductGallery>
+          <MainProductImage
             src={productDetails?.image}
-            alt="image product"
-            preview={false}
+            alt={productDetails?.name || "Sản phẩm"}
           />
-          <Row
-            style={{
-              justifyContent: "space-between",
-              paddingTop: "10px",
-              paddingLeft: "5px",
-              paddingRight: "5px",
-            }}
-          >
-            <WrapperStyleColImage span={4}>
-              <WrapperStyleImageSmall
-                src={imageProductSmall1}
-                alt="image product small"
-                preview={false}
-              />
-            </WrapperStyleColImage>
-            <WrapperStyleColImage span={4}>
-              <WrapperStyleImageSmall
-                src={imageProductSmall2}
-                alt="image product small"
-                preview={false}
-              />
-            </WrapperStyleColImage>
-            <WrapperStyleColImage span={4}>
-              <WrapperStyleImageSmall
-                src={imageProductSmall3}
-                alt="image product small"
-                preview={false}
-              />
-            </WrapperStyleColImage>
-            <WrapperStyleColImage span={4}>
-              <WrapperStyleImageSmall
-                src={imageProductSmall4}
-                alt="image product small"
-                preview={false}
-              />
-            </WrapperStyleColImage>
-            <WrapperStyleColImage span={4}>
-              <WrapperStyleImageSmall
-                src={imageProductSmall5}
-                alt="image product small"
-                preview={false}
-              />
-            </WrapperStyleColImage>
-            <WrapperStyleColImage span={4}>
-              <WrapperStyleImageSmall
-                src={imageProductSmall6}
-                alt="image product small"
-                preview={false}
-              />
-            </WrapperStyleColImage>
-          </Row>
-        </Col>
-        <Col span={14} style={{ paddingLeft: "10px" }}>
+          <ProductThumbnailList>
+            {[
+              imageProductSmall1,
+              imageProductSmall2,
+              imageProductSmall3,
+              imageProductSmall4,
+              imageProductSmall5,
+              imageProductSmall6,
+            ].map((image, index) => (
+              <WrapperStyleColImage key={image}>
+                <WrapperStyleImageSmall
+                  src={image}
+                  alt={`Ảnh sản phẩm ${index + 1}`}
+                />
+              </WrapperStyleColImage>
+            ))}
+          </ProductThumbnailList>
+        </ProductGallery>
+        <ProductInfo>
           <WrapperStyleNameProduct>
             {productDetails?.name}
           </WrapperStyleNameProduct>
-          <div>
-            <Rate
-              allowHalf
-              defaultValue={productDetails?.rating}
-              value={productDetails?.rating}
-            />
+          <ProductMeta>
+            <Rate allowHalf value={productDetails?.rating} />
             <WrapperStyleTextSell>
-              {" "}
-              | Đã bán {productDetails?.selled || 0}
+              Đã bán {productDetails?.selled || 0}
             </WrapperStyleTextSell>
-          </div>
+          </ProductMeta>
           <WrapperPriceProduct>
             <WrapperPriceTextProduct>
               {convertPrice(productDetails?.price)}
             </WrapperPriceTextProduct>
           </WrapperPriceProduct>
+          <DescriptionLabel>Mô tả sản phẩm</DescriptionLabel>
           <WrapperStyleDescription>
             {productDetails?.description}
           </WrapperStyleDescription>
-          {/* <WrapperAddressProduct>
-                        <span>Giao đến</span>
-                        <span className='address'>{user?.address}</span>
-                        <span className='change-address'>- Đổi địa chỉ</span>
-                    </WrapperAddressProduct> */}
           <LikeButtonComponent
             dataHref={"https://developers.facebook.com/docs/plugins/"}
           />
-          <div
-            style={{
-              margin: "10px 0 20px",
-              padding: "10px 0",
-              borderTop: "1px solid #e5e5e5",
-              borderBottom: "1px solid #e5e5e5",
-            }}
-          >
-            <div style={{ marginBottom: "10px" }}>Số lượng</div>
+          <PurchasePanel>
+            <QuantityLabel>Số lượng</QuantityLabel>
             <WrapperQualityProduct>
-              <button
-                style={{
-                  border: "none",
-                  background: "transparent",
-                  cursor: "pointer",
-                }}
+              <QuantityButton
+                type="button"
+                aria-label="Giảm số lượng"
                 onClick={() => handleChangeCount("decrease")}
               >
-                <MinusOutlined style={{ color: "#000", fontSize: "20px" }} />
-              </button>
+                <MinusOutlined />
+              </QuantityButton>
               <WrapperInputNumber
                 onChange={onChange}
                 defaultValue={1}
@@ -253,50 +206,29 @@ const ProductDetailsComponent = ({ idProduct }) => {
                 value={numProduct}
                 size="small"
               />
-              <button
-                style={{
-                  border: "none",
-                  background: "transparent",
-                  cursor: "pointer",
-                }}
+              <QuantityButton
+                type="button"
+                aria-label="Tăng số lượng"
                 onClick={() => handleChangeCount("increase")}
               >
-                <PlusOutlined style={{ color: "#000", fontSize: "20px" }} />
-              </button>
+                <PlusOutlined />
+              </QuantityButton>
             </WrapperQualityProduct>
-          </div>
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <div>
-              <ButtonComponent
-                size={40}
-                styleButton={{
-                  background: "-webkit-linear-gradient(top, #f59000, #fd6e1d)",
-                  height: "48px",
-                  width: "220px",
-                  border: "none",
-                  borderRadius: "4px",
-                }}
-                onClick={handleAddOrderProduct}
-                textbutton={"Chọn mua"}
-                styletextbutton={{
-                  color: "#fff",
-                  fontSize: "15px",
-                  fontWeight: "700",
-                }}
-              ></ButtonComponent>
-              {errorLimitOrder && (
-                <div style={{ color: "red" }}>Sản phẩm đã hết hàng</div>
-              )}
-            </div>
-          </div>
-        </Col>
-        <CommentComponent
-          dataHref={
-            "https://developers.facebook.com/docs/plugins/comments#configurator"
-          }
-          width="1000"
-        />
-      </Row>
+            <BuyButton type="button" onClick={handleAddOrderProduct}>
+              Chọn mua
+            </BuyButton>
+            {errorLimitOrder && <ErrorLimit>Sản phẩm đã hết hàng</ErrorLimit>}
+          </PurchasePanel>
+        </ProductInfo>
+        <CommentsSection>
+          <CommentComponent
+            dataHref={
+              "https://developers.facebook.com/docs/plugins/comments#configurator"
+            }
+            width="1000"
+          />
+        </CommentsSection>
+      </ProductDetailsShell>
     </Loading>
   );
 };
