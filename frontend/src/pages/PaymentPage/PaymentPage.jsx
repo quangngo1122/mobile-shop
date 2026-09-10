@@ -1,7 +1,30 @@
 import { Form, Radio } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
 import {
+  AddressAction,
+  AddressBlock,
+  AddressText,
+  CheckoutCard,
+  CheckoutLayout,
+  DeliveryOption,
+  HeaderGroup,
   Lable,
+  OrderButtonWrap,
+  PageEyebrow,
+  PageTitle,
+  PayPalWrap,
+  PaymentPageWrapper,
+  PaymentShell,
+  SectionHeader,
+  SectionTag,
+  SectionTitle,
+  SummaryCard,
+  SummaryList,
+  SummaryRow,
+  SummaryValue,
+  TotalHint,
+  TotalLabel,
+  TotalValue,
   WrapperInfo,
   WrapperLeft,
   WrapperRadio,
@@ -236,6 +259,7 @@ const PaymentPage = () => {
     };
     document.body.appendChild(script);
   };
+
   useEffect(() => {
     if (!window.paypal) {
       addPaypalScript();
@@ -243,172 +267,157 @@ const PaymentPage = () => {
       setSdkReady(true);
     }
   }, []);
+
   return (
-    <div style={{ background: "#f5f5fa", with: "100%", height: "100vh" }}>
+    <PaymentPageWrapper>
       <Loading isPending={isPendingAddOrder}>
-        <div style={{ height: "100%", width: "1024px", margin: "0 auto" }}>
-          <h3 style={{ fontWeight: "bold", margin: "0", padding: "10px 0" }}>
-            Thanh toán
-          </h3>
-          <div style={{ display: "flex", justifyContent: "center" }}>
-            <WrapperLeft style={{ marginRight: "40px" }}>
-              <WrapperInfo>
-                <div>
+        <PaymentShell>
+          <HeaderGroup>
+            <PageEyebrow>Checkout</PageEyebrow>
+            <PageTitle>Thanh toán</PageTitle>
+          </HeaderGroup>
+
+          <CheckoutLayout>
+            <WrapperLeft>
+              <CheckoutCard>
+                <SectionHeader>
+                  <SectionTitle>Phương thức giao hàng</SectionTitle>
+                  <SectionTag>Delivery</SectionTag>
+                </SectionHeader>
+                <WrapperInfo>
                   <Lable>Chọn phương thức giao hàng</Lable>
                   <WrapperRadio onChange={handleDelivery} value={delivery}>
                     <Radio value="fast">
-                      <span style={{ color: "#ea8500", fontWeight: "bold" }}>
-                        FAST
-                      </span>{" "}
-                      Giao hàng tiết kiệm
+                      <DeliveryOption>
+                        <span>FAST</span>
+                        Giao hàng tiết kiệm
+                      </DeliveryOption>
                     </Radio>
                     <Radio value="gojek">
-                      <span style={{ color: "#ea8500", fontWeight: "bold" }}>
-                        GO_JEK
-                      </span>{" "}
-                      Giao hàng tiết kiệm
+                      <DeliveryOption>
+                        <span>GO_JEK</span>
+                        Giao hàng nhanh trong ngày
+                      </DeliveryOption>
                     </Radio>
                   </WrapperRadio>
-                </div>
-              </WrapperInfo>
-              <WrapperInfo>
-                <div>
-                  <Lable>Chọn phương thức thanh toán</Lable>
+                </WrapperInfo>
+              </CheckoutCard>
+
+              <CheckoutCard>
+                <SectionHeader>
+                  <SectionTitle>Phương thức thanh toán</SectionTitle>
+                  <SectionTag>Payment</SectionTag>
+                </SectionHeader>
+                <WrapperInfo>
+                  <Lable>Chọn hình thức thanh toán</Lable>
                   <WrapperRadio onChange={handlePayment} value={payment}>
                     <Radio value="later_money">
-                      {" "}
-                      Thanh toán tiền mặt khi nhận hàng
+                      <DeliveryOption>
+                        <span>COD</span>
+                        Thanh toán tiền mặt khi nhận hàng
+                      </DeliveryOption>
                     </Radio>
-                    <Radio value="paypal"> Thanh toán tiền bằng paypal</Radio>
+                    <Radio value="paypal">
+                      <DeliveryOption>
+                        <span>PAYPAL</span>
+                        Thanh toán bằng ví PayPal
+                      </DeliveryOption>
+                    </Radio>
                   </WrapperRadio>
-                </div>
-              </WrapperInfo>
+                </WrapperInfo>
+              </CheckoutCard>
             </WrapperLeft>
+
             <WrapperRight>
-              <div style={{ width: "100%" }}>
+              <SummaryCard>
+                <SectionHeader>
+                  <SectionTitle>Địa chỉ nhận hàng</SectionTitle>
+                  <SectionTag>Info</SectionTag>
+                </SectionHeader>
                 <WrapperInfo>
-                  <div>
-                    <span>Địa chỉ: </span>
-                    <span
-                      style={{ fontWeight: "bold" }}
-                    >{`${user?.address} - ${user?.city} - `}</span>
-                    <span
-                      onClick={handleChangeAddress}
-                      style={{ color: "#9255FD", cursor: "pointer" }}
-                    >
+                  <AddressBlock>
+                    <AddressText>
+                      {`${user?.address || "Chưa có địa chỉ"} - ${
+                        user?.city || "Chưa cập nhật"
+                      }`}
+                    </AddressText>
+                    <AddressAction onClick={handleChangeAddress} type="button">
                       Thay đổi
-                    </span>
-                  </div>
+                    </AddressAction>
+                  </AddressBlock>
                 </WrapperInfo>
+              </SummaryCard>
+
+              <SummaryCard>
+                <SectionHeader>
+                  <SectionTitle>Tóm tắt thanh toán</SectionTitle>
+                  <SectionTag>Summary</SectionTag>
+                </SectionHeader>
                 <WrapperInfo>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <span>Tạm tính</span>
-                    <span
-                      style={{
-                        color: "#000",
-                        fontSize: "14px",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {convertPrice(priceMemo)}
-                    </span>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <span>Giảm giá</span>
-                    <span
-                      style={{
-                        color: "#000",
-                        fontSize: "14px",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {convertPrice(discountMemo)}
-                    </span>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <span>Phí giao hàng</span>
-                    <span
-                      style={{
-                        color: "#000",
-                        fontSize: "14px",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {convertPrice(deliveryPriceMemo)}
-                    </span>
-                  </div>
+                  <SummaryList>
+                    <SummaryRow>
+                      <span>Tạm tính</span>
+                      <SummaryValue>{convertPrice(priceMemo)}</SummaryValue>
+                    </SummaryRow>
+                    <SummaryRow>
+                      <span>Giảm giá</span>
+                      <SummaryValue>{convertPrice(discountMemo)}</SummaryValue>
+                    </SummaryRow>
+                    <SummaryRow>
+                      <span>Phí giao hàng</span>
+                      <SummaryValue>
+                        {convertPrice(deliveryPriceMemo)}
+                      </SummaryValue>
+                    </SummaryRow>
+                  </SummaryList>
+
+                  <WrapperTotal>
+                    <TotalLabel>Tổng tiền</TotalLabel>
+                    <TotalValue>
+                      <span>{convertPrice(totalPriceMemo)}</span>
+                      <TotalHint>(Đã bao gồm VAT nếu có)</TotalHint>
+                    </TotalValue>
+                  </WrapperTotal>
                 </WrapperInfo>
-                <WrapperTotal>
-                  <span>Tổng tiền</span>
-                  <span style={{ display: "flex", flexDirection: "column" }}>
-                    <span
-                      style={{
-                        color: "rgb(254, 56, 52)",
-                        fontSize: "24px",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {convertPrice(totalPriceMemo)}
-                    </span>
-                    <span style={{ color: "#000", fontSize: "11px" }}>
-                      (Đã bao gồm VAT nếu có)
-                    </span>
-                  </span>
-                </WrapperTotal>
-              </div>
+              </SummaryCard>
+
               {payment === "paypal" && sdkReady ? (
-                <div style={{ width: "360px", marginLeft: "40px" }}>
+                <PayPalWrap>
                   <PayPalButton
                     amount={Math.round(totalPriceMemo / 30000)}
-                    // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
                     onSuccess={onSuccessPaypal}
                     onError={() => {
                       alert("Error");
                     }}
                   />
-                </div>
+                </PayPalWrap>
               ) : (
-                <ButtonComponent
-                  onClick={() => handleAddOrder()}
-                  size={40}
-                  styleButton={{
-                    background:
-                      "-webkit-linear-gradient(top, #f59000, #fd6e1d)",
-                    height: "48px",
-                    width: "360px",
-                    border: "none",
-                    borderRadius: "4px",
-                    marginLeft: "40px",
-                  }}
-                  textbutton={"Đặt hàng"}
-                  styletextbutton={{
-                    color: "#fff",
-                    fontSize: "15px",
-                    fontWeight: "700",
-                  }}
-                ></ButtonComponent>
+                <OrderButtonWrap>
+                  <ButtonComponent
+                    onClick={() => handleAddOrder()}
+                    size={40}
+                    styleButton={{
+                      background:
+                        "linear-gradient(135deg, #0d6b68 0%, #0f4d63 100%)",
+                      height: "50px",
+                      width: "100%",
+                      border: "none",
+                      borderRadius: "12px",
+                      boxShadow: "0 16px 30px rgba(13, 107, 104, 0.22)",
+                    }}
+                    textbutton={"Đặt hàng"}
+                    styletextbutton={{
+                      color: "#fff",
+                      fontSize: "15px",
+                      fontWeight: "700",
+                    }}
+                  ></ButtonComponent>
+                </OrderButtonWrap>
               )}
             </WrapperRight>
-          </div>
-        </div>
+          </CheckoutLayout>
+        </PaymentShell>
+
         <ModalComponent
           forceRender
           title="Cập nhật thông tin giao hàng"
@@ -421,7 +430,6 @@ const PaymentPage = () => {
               name="basic"
               labelCol={{ span: 5 }}
               wrapperCol={{ span: 19 }}
-              // onFinish={onUpdateUser}
               autoComplete="on"
               form={form}
             >
@@ -477,7 +485,7 @@ const PaymentPage = () => {
           </Loading>
         </ModalComponent>
       </Loading>
-    </div>
+    </PaymentPageWrapper>
   );
 };
 
