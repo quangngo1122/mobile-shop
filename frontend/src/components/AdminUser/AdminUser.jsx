@@ -1,5 +1,28 @@
 import React, { useEffect, useRef, useState } from "react";
-import { WrapperHeader, WrapperUploadFile } from "./style";
+import {
+  AdminUserPage,
+  FormActionRow,
+  FormCard,
+  FormInputWrapper,
+  FormLabel,
+  FormRow,
+  HeaderContent,
+  HeaderSubtitle,
+  PageShell,
+  PreviewImage,
+  PrimaryButton,
+  StatCard,
+  StatLabel,
+  StatValue,
+  TableBody,
+  TableHeader,
+  TablePanel,
+  TableTitle,
+  TopStats,
+  UploadPreview,
+  WrapperHeader,
+  WrapperUploadFile,
+} from "./style";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -351,23 +374,53 @@ const AdminUser = () => {
     );
   };
   return (
-    <div>
-      <WrapperHeader>Quản lý người dùng</WrapperHeader>
-      <div style={{ marginTop: "20px" }}>
-        <TableComponent
-          handleDeleteMany={handleDeleteManyUsers}
-          columns={columns}
-          isPending={isPendingUsers}
-          data={dataTable}
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: (event) => {
-                setRowSelected(record._id);
-              },
-            };
-          }}
-        />
-      </div>
+    <AdminUserPage>
+      <PageShell>
+        <HeaderContent>
+          <WrapperHeader>Quản lý người dùng</WrapperHeader>
+          <HeaderSubtitle>
+            Theo dõi tài khoản, vai trò và thông tin khách hàng trong hệ thống.
+          </HeaderSubtitle>
+        </HeaderContent>
+
+        <TopStats>
+          <StatCard>
+            <StatLabel>Tổng tài khoản</StatLabel>
+            <StatValue>{users?.data?.length || 0}</StatValue>
+          </StatCard>
+          <StatCard>
+            <StatLabel>Quản lý</StatLabel>
+            <StatValue>
+              {users?.data?.filter((item) => item.isAdmin).length || 0}
+            </StatValue>
+          </StatCard>
+          <StatCard>
+            <StatLabel>Trạng thái</StatLabel>
+            <StatValue>Live</StatValue>
+          </StatCard>
+        </TopStats>
+
+        <TablePanel>
+          <TableHeader>
+            <TableTitle>Danh sách người dùng</TableTitle>
+          </TableHeader>
+          <TableBody>
+            <TableComponent
+              handleDeleteMany={handleDeleteManyUsers}
+              columns={columns}
+              isPending={isPendingUsers}
+              data={dataTable}
+              onRow={(record, rowIndex) => {
+                return {
+                  onClick: (event) => {
+                    setRowSelected(record._id);
+                  },
+                };
+              }}
+            />
+          </TableBody>
+        </TablePanel>
+      </PageShell>
       <DrawerComponent
         title="Chi tiết người dùng"
         isOpen={isOpenDrawer}
@@ -375,103 +428,139 @@ const AdminUser = () => {
         width="40%"
       >
         <Loading isPending={isPendingUpdate || isPendingUpdated}>
-          <Form
-            name="basic"
-            labelCol={{ span: 6 }}
-            wrapperCol={{ span: 18 }}
-            onFinish={onUpdateUser}
-            autoComplete="on"
-            form={form}
-          >
-            <Form.Item
-              label="Tên"
-              name="name"
-              rules={[{ required: true, message: "Please input your name!" }]}
+          <FormCard>
+            <Form
+              name="basic"
+              onFinish={onUpdateUser}
+              autoComplete="on"
+              form={form}
             >
-              <InputComponent
-                value={stateUserDetails["name"]}
-                onChange={handleOnChangeDetails}
-                name="name"
-              />
-            </Form.Item>
-
-            <Form.Item
-              label="Email"
-              name="email"
-              rules={[{ required: true, message: "Please input your email!" }]}
-            >
-              <InputComponent
-                value={stateUserDetails["email"]}
-                onChange={handleOnChangeDetails}
-                name="email"
-              />
-            </Form.Item>
-            <Form.Item
-              label="Số điện thoại"
-              name="phone"
-              rules={[{ required: true, message: "Please input your phone!" }]}
-            >
-              <InputComponent
-                value={stateUserDetails.phone}
-                onChange={handleOnChangeDetails}
-                name="phone"
-              />
-            </Form.Item>
-            <Form.Item
-              label="Địa chỉ"
-              name="address"
-              rules={[
-                { required: true, message: "Please input your address!" },
-              ]}
-            >
-              <InputComponent
-                value={stateUserDetails.address}
-                onChange={handleOnChangeDetails}
-                name="address"
-              />
-            </Form.Item>
-            <Form.Item
-              label="Thành phố"
-              name="city"
-              rules={[{ required: true, message: "Please input your city!" }]}
-            >
-              <InputComponent
-                value={stateUserDetails.city}
-                onChange={handleOnChangeDetails}
-                name="city"
-              />
-            </Form.Item>
-            <Form.Item
-              label="Ảnh đại diện"
-              name="avatar"
-              rules={[{ required: true, message: "Please input your avatar!" }]}
-            >
-              <WrapperUploadFile
-                onChange={handleOnchangeAvatarDetails}
-                maxCount={1}
-              >
-                <Button>Chọn file</Button>
-                {stateUserDetails?.avatar && (
-                  <img
-                    src={stateUserDetails?.avatar}
-                    style={{
-                      height: "60px",
-                      width: "60px",
-                      borderRadius: "50%",
-                      objectFit: "cover",
-                      marginLeft: "20px",
-                    }}
-                    alt="avatar"
-                  />
-                )}
-              </WrapperUploadFile>
-            </Form.Item>
-            <Form.Item wrapperCol={{ offset: 20, span: 16 }}>
-              <Button type="primary" htmlType="submit">
-                Lưu
-              </Button>
-            </Form.Item>
-          </Form>
+              <FormRow>
+                <FormLabel>Tên</FormLabel>
+                <FormInputWrapper>
+                  <Form.Item
+                    name="name"
+                    rules={[{ required: true, message: "Vui lòng nhập tên!" }]}
+                    style={{ margin: 0 }}
+                  >
+                    <InputComponent
+                      value={stateUserDetails["name"]}
+                      onChange={handleOnChangeDetails}
+                      name="name"
+                    />
+                  </Form.Item>
+                </FormInputWrapper>
+              </FormRow>
+              <FormRow>
+                <FormLabel>Email</FormLabel>
+                <FormInputWrapper>
+                  <Form.Item
+                    name="email"
+                    rules={[
+                      { required: true, message: "Vui lòng nhập email!" },
+                    ]}
+                    style={{ margin: 0 }}
+                  >
+                    <InputComponent
+                      value={stateUserDetails.email}
+                      onChange={handleOnChangeDetails}
+                      name="email"
+                    />
+                  </Form.Item>
+                </FormInputWrapper>
+              </FormRow>
+              <FormRow>
+                <FormLabel>Số điện thoại</FormLabel>
+                <FormInputWrapper>
+                  <Form.Item
+                    name="phone"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Vui lòng nhập số điện thoại!",
+                      },
+                    ]}
+                    style={{ margin: 0 }}
+                  >
+                    <InputComponent
+                      value={stateUserDetails.phone}
+                      onChange={handleOnChangeDetails}
+                      name="phone"
+                    />
+                  </Form.Item>
+                </FormInputWrapper>
+              </FormRow>
+              <FormRow>
+                <FormLabel>Địa chỉ</FormLabel>
+                <FormInputWrapper>
+                  <Form.Item
+                    name="address"
+                    rules={[
+                      { required: true, message: "Vui lòng nhập địa chỉ!" },
+                    ]}
+                    style={{ margin: 0 }}
+                  >
+                    <InputComponent
+                      value={stateUserDetails.address}
+                      onChange={handleOnChangeDetails}
+                      name="address"
+                    />
+                  </Form.Item>
+                </FormInputWrapper>
+              </FormRow>
+              <FormRow>
+                <FormLabel>Thành phố</FormLabel>
+                <FormInputWrapper>
+                  <Form.Item
+                    name="city"
+                    rules={[
+                      { required: true, message: "Vui lòng nhập thành phố!" },
+                    ]}
+                    style={{ margin: 0 }}
+                  >
+                    <InputComponent
+                      value={stateUserDetails.city}
+                      onChange={handleOnChangeDetails}
+                      name="city"
+                    />
+                  </Form.Item>
+                </FormInputWrapper>
+              </FormRow>
+              <FormRow>
+                <FormLabel>Ảnh đại diện</FormLabel>
+                <FormInputWrapper>
+                  <Form.Item
+                    name="avatar"
+                    rules={[
+                      {
+                        required: true,
+                        message: "Vui lòng chọn ảnh đại diện!",
+                      },
+                    ]}
+                    style={{ margin: 0 }}
+                  >
+                    <WrapperUploadFile
+                      onChange={handleOnchangeAvatarDetails}
+                      maxCount={1}
+                    >
+                      <UploadPreview>
+                        <Button>Chọn file</Button>
+                        {stateUserDetails?.avatar && (
+                          <PreviewImage
+                            src={stateUserDetails?.avatar}
+                            alt="avatar"
+                          />
+                        )}
+                      </UploadPreview>
+                    </WrapperUploadFile>
+                  </Form.Item>
+                </FormInputWrapper>
+              </FormRow>
+              <FormActionRow>
+                <PrimaryButton type="submit">Lưu thay đổi</PrimaryButton>
+              </FormActionRow>
+            </Form>
+          </FormCard>
         </Loading>
       </DrawerComponent>
       <ModalComponent
@@ -485,7 +574,7 @@ const AdminUser = () => {
           <div>Bạn có chắc xóa tài khoản này không?</div>
         </Loading>
       </ModalComponent>
-    </div>
+    </AdminUserPage>
   );
 };
 
