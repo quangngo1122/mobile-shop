@@ -1,5 +1,21 @@
 import React from "react";
-import { WrapperHeader } from "./style";
+import {
+  AdminOrderPage,
+  HeaderContent,
+  HeaderSubtitle,
+  PageShell,
+  PriceValue,
+  StatCard,
+  StatLabel,
+  StatValue,
+  StatusTag,
+  TableBody,
+  TableHeader,
+  TablePanel,
+  TableTitle,
+  TopStats,
+  WrapperHeader,
+} from "./style";
 import { SearchOutlined } from "@ant-design/icons";
 import { Button, Space } from "antd";
 import TableComponent from "../TableComponent/TableComponent";
@@ -147,23 +163,92 @@ const OrderAdmin = () => {
         phone: order?.shippingAddress?.phone,
         address: order?.shippingAddress?.address,
         paymentMethod: orderContant.payment[order?.paymentMethod],
-        isPaid: order?.isPaid ? "Đã thanh toán" : "Chưa thanh toán",
-        isDelivered: order?.isDelivered ? "Đã giao hàng" : "Chưa giao hàng",
+        isPaid: order?.isPaid,
+        isDelivered: order?.isDelivered,
         totalPrice: convertPrice(order?.totalPrice),
       };
     });
 
+  const paidOrders = orders?.data?.filter((order) => order?.isPaid).length || 0;
+  const deliveredOrders =
+    orders?.data?.filter((order) => order?.isDelivered).length || 0;
+
+  const orderColumns = columns.map((column) => {
+    if (column.dataIndex === "isPaid") {
+      return {
+        ...column,
+        render: (value) => (
+          <StatusTag $success={value}>
+            {value ? "Đã thanh toán" : "Chưa thanh toán"}
+          </StatusTag>
+        ),
+      };
+    }
+    if (column.dataIndex === "isDelivered") {
+      return {
+        ...column,
+        render: (value) => (
+          <StatusTag $success={value}>
+            {value ? "Đã giao hàng" : "Chưa giao hàng"}
+          </StatusTag>
+        ),
+      };
+    }
+    if (column.dataIndex === "totalPrice") {
+      return {
+        ...column,
+        render: (value) => <PriceValue>{value}</PriceValue>,
+      };
+    }
+    return column;
+  });
+
   return (
-    <div>
-      <WrapperHeader>Quản lý đơn hàng</WrapperHeader>
-      <div style={{ marginTop: "20px" }}>
-        <TableComponent
-          columns={columns}
-          isPending={isPendingOrders}
-          data={dataTable}
-        />
-      </div>
-    </div>
+    <AdminOrderPage>
+      <PageShell>
+        <HeaderContent>
+          <WrapperHeader>Quản lý đơn hàng</WrapperHeader>
+          <HeaderSubtitle>
+            Theo dõi trạng thái xử lý, thanh toán và giao hàng của tất cả đơn
+            hàng.
+          </HeaderSubtitle>
+        </HeaderContent>
+
+        <TopStats>
+          <StatCard>
+            <StatLabel>Tổng đơn hàng</StatLabel>
+            <StatValue>{orders?.data?.length || 0}</StatValue>
+          </StatCard>
+          <StatCard>
+            <StatLabel>Đã thanh toán</StatLabel>
+            <StatValue>{paidOrders}</StatValue>
+          </StatCard>
+          <StatCard>
+            <StatLabel>Đã giao hàng</StatLabel>
+            <StatValue>{deliveredOrders}</StatValue>
+          </StatCard>
+          <StatCard>
+            <StatLabel>Đang xử lý</StatLabel>
+            <StatValue>
+              {Math.max((orders?.data?.length || 0) - deliveredOrders, 0)}
+            </StatValue>
+          </StatCard>
+        </TopStats>
+
+        <TablePanel>
+          <TableHeader>
+            <TableTitle>Danh sách đơn hàng</TableTitle>
+          </TableHeader>
+          <TableBody>
+            <TableComponent
+              columns={orderColumns}
+              isPending={isPendingOrders}
+              data={dataTable}
+            />
+          </TableBody>
+        </TablePanel>
+      </PageShell>
+    </AdminOrderPage>
   );
 };
 
