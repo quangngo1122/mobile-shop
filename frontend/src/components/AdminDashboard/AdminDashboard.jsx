@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React from "react";
 import {
   AreaChart,
   Area,
@@ -8,12 +8,26 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { Col, Row } from "antd";
 import {
+  ChartCanvas,
+  ChartDescription,
+  ChartGrid,
+  ChartHeader,
+  ChartPanel,
+  ChartTitle,
+  CustomTooltipBox,
   DashboardCard,
   DashboardCardBg,
   DashboardCardData,
   DashboardCardTittle,
+  DashboardIntro,
+  DashboardPage,
+  DashboardShell,
+  DashboardSubtitle,
+  DashboardTitle,
+  MetricCopy,
+  MetricGrid,
+  PieCanvas,
 } from "./style";
 import * as UserService from "../../services/UserService";
 import * as ProductService from "../../services/ProductService";
@@ -76,159 +90,132 @@ const AdminDashboard = () => {
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="custom-tooltip">
+        <CustomTooltipBox>
           <p>{payload[0].payload.type}</p>
           <p>{`Số lượng: ${payload[0].value}`}</p>
-        </div>
+        </CustomTooltipBox>
       );
     }
     return null;
   };
 
   return (
-    <>
-      <Row>
-        <Col
-          span={8}
-          ref={cardRef}
-          style={{
-            opacity: isCardVisible ? 1 : 0,
-            transform: isCardVisible ? "translateY(0)" : "translateY(20px)",
-            transition: "opacity 0.5s ease, transform 0.5s ease",
-          }}
-        >
-          <DashboardCard style={{ backgroundColor: "#fff" }}>
-            <DashboardCardBg src={iconcard1} alt="iconcard1" />
-            <div
-              style={{
-                marginLeft: "100px",
-                marginTop: "10px",
-                textAlign: "center",
-              }}
-            >
-              <DashboardCardTittle>Tài Khoản</DashboardCardTittle>
+    <DashboardPage>
+      <DashboardShell>
+        <DashboardIntro>
+          <DashboardTitle>Tổng quan hệ thống</DashboardTitle>
+          <DashboardSubtitle>
+            Theo dõi nhanh tình hình tài khoản, sản phẩm và đơn hàng của cửa
+            hàng.
+          </DashboardSubtitle>
+        </DashboardIntro>
+
+        <MetricGrid>
+          <DashboardCard
+            ref={cardRef}
+            style={{
+              opacity: isCardVisible ? 1 : 0,
+              transform: isCardVisible ? "translateY(0)" : "translateY(20px)",
+              transition: "opacity 0.5s ease, transform 0.5s ease",
+            }}
+          >
+            <DashboardCardBg src={iconcard1} alt="Tài khoản" />
+            <MetricCopy>
+              <DashboardCardTittle>Tài khoản</DashboardCardTittle>
               <DashboardCardData isPending={isPendingUsers}>
-                {users?.data?.length}
+                {users?.data?.length || 0}
               </DashboardCardData>
-            </div>
+            </MetricCopy>
           </DashboardCard>
-        </Col>
-        <Col
-          span={8}
-          ref={cardRef}
-          style={{
-            opacity: isCardVisible ? 1 : 0,
-            transform: isCardVisible ? "translateY(0)" : "translateY(20px)",
-            transition: "opacity 0.5s ease, transform 0.5s ease",
-          }}
-        >
-          <DashboardCard style={{ backgroundColor: "#fff" }}>
-            <DashboardCardBg src={iconcard2} alt="iconcard2" />
-            <div
-              style={{
-                marginLeft: "100px",
-                marginTop: "10px",
-                textAlign: "center",
-              }}
-            >
-              <DashboardCardTittle>Sản Phẩm</DashboardCardTittle>
+
+          <DashboardCard
+            ref={cardRef}
+            style={{
+              opacity: isCardVisible ? 1 : 0,
+              transform: isCardVisible ? "translateY(0)" : "translateY(20px)",
+              transition: "opacity 0.5s ease, transform 0.5s ease",
+            }}
+          >
+            <DashboardCardBg src={iconcard2} alt="Sản phẩm" />
+            <MetricCopy>
+              <DashboardCardTittle>Sản phẩm</DashboardCardTittle>
               <DashboardCardData isPending={isPendingProducts}>
-                {products?.data?.length}
+                {products?.data?.length || 0}
               </DashboardCardData>
-            </div>
+            </MetricCopy>
           </DashboardCard>
-        </Col>
-        <Col
-          span={8}
-          ref={cardRef}
-          style={{
-            opacity: isCardVisible ? 1 : 0,
-            transform: isCardVisible ? "translateY(0)" : "translateY(20px)",
-            transition: "opacity 0.5s ease, transform 0.5s ease",
-          }}
-        >
-          <DashboardCard style={{ backgroundColor: "#fff" }}>
-            <DashboardCardBg src={iconcard3} alt="iconcard3" />
-            <div
-              style={{
-                marginLeft: "100px",
-                marginTop: "10px",
-                textAlign: "center",
-              }}
-            >
-              <DashboardCardTittle>Đơn Hàng</DashboardCardTittle>
+
+          <DashboardCard
+            ref={cardRef}
+            style={{
+              opacity: isCardVisible ? 1 : 0,
+              transform: isCardVisible ? "translateY(0)" : "translateY(20px)",
+              transition: "opacity 0.5s ease, transform 0.5s ease",
+            }}
+          >
+            <DashboardCardBg src={iconcard3} alt="Đơn hàng" />
+            <MetricCopy>
+              <DashboardCardTittle>Đơn hàng</DashboardCardTittle>
               <DashboardCardData isPending={isPendingOrders}>
-                {orders?.data?.length}
+                {orders?.data?.length || 0}
               </DashboardCardData>
-            </div>
+            </MetricCopy>
           </DashboardCard>
-        </Col>
-      </Row>
-      <div
-        style={{
-          display: "flex",
-          gap: "20px",
-          marginTop: "40px",
-          marginRight: "30px",
-        }}
-      >
-        <div
-          style={{
-            width: "66%",
-            paddingRight: "10px",
-            backgroundColor: "#fff",
-          }}
-        >
-          <h2
-            style={{
-              marginLeft: "20px",
-              color: "rgb(99, 99, 99)",
-              fontSize: "16px",
-            }}
-          >
-            Số Lượng Sản Phẩm
-          </h2>
-          <div style={{ width: "100%", height: 300 }}>
-            <ResponsiveContainer>
-              <AreaChart
-                data={datachart}
-                margin={{
-                  top: 10,
-                  right: 30,
-                  left: 0,
-                  bottom: 0,
-                }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="type" />
-                <YAxis />
-                <Tooltip content={<CustomTooltip />} />
-                <Area
-                  type="monotone"
-                  dataKey="countInStock"
-                  stroke="#8884d8"
-                  fill="rgb(110, 186, 252)"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-        <div style={{ width: "32%", backgroundColor: "#fff" }}>
-          <h2
-            style={{
-              marginLeft: "20px",
-              color: "rgb(99, 99, 99)",
-              fontSize: "16px",
-            }}
-          >
-            Phương thức thanh toán
-          </h2>
-          <div style={{ paddingLeft: "30px", height: 250, width: 250 }}>
-            <PieChartComponent data={orders?.data} />
-          </div>
-        </div>
-      </div>
-    </>
+        </MetricGrid>
+
+        <ChartGrid>
+          <ChartPanel>
+            <ChartHeader>
+              <div>
+                <ChartTitle>Số lượng sản phẩm</ChartTitle>
+                <ChartDescription>
+                  Tồn kho được phân bổ theo từng danh mục.
+                </ChartDescription>
+              </div>
+            </ChartHeader>
+            <ChartCanvas>
+              <ResponsiveContainer>
+                <AreaChart
+                  data={datachart}
+                  margin={{
+                    top: 10,
+                    right: 30,
+                    left: 0,
+                    bottom: 0,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="type" />
+                  <YAxis />
+                  <Tooltip content={<CustomTooltip />} />
+                  <Area
+                    type="monotone"
+                    dataKey="countInStock"
+                    stroke="#0d6b68"
+                    strokeWidth={3}
+                    fill="#a7dfd8"
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </ChartCanvas>
+          </ChartPanel>
+
+          <ChartPanel>
+            <ChartHeader>
+              <div>
+                <ChartTitle>Phương thức thanh toán</ChartTitle>
+                <ChartDescription>
+                  Tỷ trọng các phương thức trong đơn hàng.
+                </ChartDescription>
+              </div>
+            </ChartHeader>
+            <PieCanvas>
+              <PieChartComponent data={orders?.data} />
+            </PieCanvas>
+          </ChartPanel>
+        </ChartGrid>
+      </DashboardShell>
+    </DashboardPage>
   );
 };
 
