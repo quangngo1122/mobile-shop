@@ -16,29 +16,31 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useMutationHooks } from "../../hooks/useMutationHook";
 import * as message from "../../components/Message/Message";
 import imgEmtyCart from "../../assets/images/icons8-clear-shopping-cart-96.png";
+import { useSelector } from "react-redux";
 
 const MyOrderPage = () => {
   const location = useLocation();
   const { state } = location;
   const navigate = useNavigate();
+  const user = useSelector((store) => store?.user);
+  const userId = state?.id || user?.id;
+  const accessToken = state?.access_token || state?.token || user?.access_token;
+
   const fetchMyOrder = async () => {
-    const res = await OrderService.getOrderByUserId(
-      state?.id,
-      state?.access_token,
-    );
+    const res = await OrderService.getOrderByUserId(userId, accessToken);
     return res.data;
   };
 
   const queryOrder = useQuery({
-    queryKey: ["orders"],
+    queryKey: ["orders", userId],
     queryFn: fetchMyOrder,
-    enabled: !!state?.id && !!state?.token,
+    enabled: !!userId && !!accessToken,
   });
   const { isPending, data } = queryOrder;
   const handleDetailsOrder = (id) => {
     navigate(`/details-order/${id}`, {
       state: {
-        token: state?.token,
+        token: accessToken,
       },
     });
   };
@@ -50,7 +52,7 @@ const MyOrderPage = () => {
 
   const handleCanceOrder = (order) => {
     mutation.mutate(
-      { id: order._id, token: state?.token, orderItems: order?.orderItems },
+      { id: order._id, token: accessToken, orderItems: order?.orderItems },
       {
         onSuccess: () => {
           queryOrder.refetch();
