@@ -2,8 +2,26 @@ import React, { useEffect } from "react";
 import * as OrderService from "../../services/OrderService";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../components/LoadingComponent/Loading";
-import ButtonComponent from "../../components/ButtonComponent/ButtonComponent";
 import {
+  ActionGroup,
+  EmptyState,
+  OrderAction,
+  OrderCount,
+  OrderPageShell,
+  PageIntro,
+  PageSubtitle,
+  PageTitle,
+  ProductImage,
+  ProductInfo,
+  ProductName,
+  ProductPrice,
+  ProductQuantity,
+  StatusGroup,
+  StatusHeading,
+  StatusTag,
+  TotalBlock,
+  TotalLabel,
+  TotalValue,
   WrapperContainer,
   WrapperFooterItem,
   WrapperHeaderItem,
@@ -79,32 +97,12 @@ const MyOrderPage = () => {
     return data?.map((order) => {
       return (
         <WrapperHeaderItem key={order?._id}>
-          <img
-            src={order?.image}
-            style={{
-              width: "70px",
-              height: "70px",
-              objectFit: "cover",
-              border: "1px solid rgb(238, 238, 238)",
-              padding: "2px",
-            }}
-          />
-          <div
-            style={{
-              width: 260,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-              marginLeft: "10px",
-            }}
-          >
-            {order?.name}
-          </div>
-          <span
-            style={{ fontSize: "13px", color: "#242424", marginLeft: "auto" }}
-          >
-            {convertPrice(order?.price)}
-          </span>
+          <ProductImage src={order?.image} alt={order?.name || "Sản phẩm"} />
+          <ProductInfo>
+            <ProductName>{order?.name}</ProductName>
+            <ProductQuantity>Số lượng: {order?.amount || 1}</ProductQuantity>
+          </ProductInfo>
+          <ProductPrice>{convertPrice(order?.price)}</ProductPrice>
         </WrapperHeaderItem>
       );
     });
@@ -113,105 +111,66 @@ const MyOrderPage = () => {
   return (
     <Loading isPending={isPending || isPendingCancel}>
       <WrapperContainer>
-        <div style={{ height: "100%", width: "1024px", margin: "0 auto" }}>
-          <h4
-            style={{
-              fontSize: "18px",
-              margin: "0 10px 0 0",
-              padding: "10px 0",
-            }}
-          >
-            Đơn hàng của tôi
-          </h4>
+        <OrderPageShell>
+          <PageIntro>
+            <PageTitle>Đơn hàng của tôi</PageTitle>
+            <PageSubtitle>
+              Theo dõi trạng thái và xem lại các sản phẩm bạn đã đặt.
+              {data?.length > 0 && (
+                <OrderCount> {data.length} đơn hàng</OrderCount>
+              )}
+            </PageSubtitle>
+          </PageIntro>
           <WrapperListOrder>
             {data?.map((order) => {
               return (
                 <WrapperItemOrder key={order?._id}>
                   <WrapperStatus>
-                    <span style={{ fontSize: "14px", fontWeight: "bold" }}>
-                      Trạng thái
-                    </span>
-                    <div>
-                      <span style={{ color: "rgb(255, 66, 78)" }}>
-                        Giao hàng:{" "}
-                      </span>
-                      <span
-                        style={{
-                          color: "rgb(90, 32, 193)",
-                          fontWeight: "bold",
-                        }}
-                      >{`${order.isDelivered ? "Đã giao hàng" : "Chưa giao hàng"}`}</span>
-                    </div>
-                    <div>
-                      <span style={{ color: "rgb(255, 66, 78)" }}>
-                        Thanh toán:{" "}
-                      </span>
-                      <span
-                        style={{
-                          color: "rgb(90, 32, 193)",
-                          fontWeight: "bold",
-                        }}
-                      >{`${order.isPaid ? "Đã thanh toán" : "Chưa thanh toán"}`}</span>
-                    </div>
+                    <StatusHeading>Trạng thái đơn hàng</StatusHeading>
+                    <StatusGroup>
+                      <StatusTag $success={order.isDelivered}>
+                        {order.isDelivered ? "Đã giao hàng" : "Chưa giao hàng"}
+                      </StatusTag>
+                      <StatusTag $success={order.isPaid}>
+                        {order.isPaid ? "Đã thanh toán" : "Chưa thanh toán"}
+                      </StatusTag>
+                    </StatusGroup>
                   </WrapperStatus>
                   {renderProduct(order?.orderItems)}
                   <WrapperFooterItem>
-                    <div>
-                      <span style={{ color: "rgb(255, 66, 78)" }}>
-                        Tổng tiền:{" "}
-                      </span>
-                      <span
-                        style={{
-                          fontSize: "13px",
-                          color: "rgb(56, 56, 61)",
-                          fontWeight: 700,
-                        }}
-                      >
-                        {convertPrice(order?.totalPrice)}
-                      </span>
-                    </div>
-                    <div style={{ display: "flex", gap: "10px" }}>
-                      <ButtonComponent
+                    <TotalBlock>
+                      <TotalLabel>Tổng tiền</TotalLabel>
+                      <TotalValue>{convertPrice(order?.totalPrice)}</TotalValue>
+                    </TotalBlock>
+                    <ActionGroup>
+                      <OrderAction
+                        type="button"
                         onClick={() => handleCanceOrder(order)}
-                        size={40}
-                        styleButton={{
-                          height: "36px",
-                          border: "1px solid #9255FD",
-                          borderRadius: "4px",
-                        }}
-                        textbutton={"Hủy đơn hàng"}
-                        styletextbutton={{ color: "#9255FD", fontSize: "14px" }}
-                      ></ButtonComponent>
-                      <ButtonComponent
+                      >
+                        Hủy đơn hàng
+                      </OrderAction>
+                      <OrderAction
+                        type="button"
+                        $primary
                         onClick={() => handleDetailsOrder(order?._id)}
-                        size={40}
-                        styleButton={{
-                          height: "36px",
-                          border: "1px solid #9255FD",
-                          borderRadius: "4px",
-                        }}
-                        textbutton={"Xem chi tiết"}
-                        styletextbutton={{ color: "#9255FD", fontSize: "14px" }}
-                      ></ButtonComponent>
-                    </div>
+                      >
+                        Xem chi tiết
+                      </OrderAction>
+                    </ActionGroup>
                   </WrapperFooterItem>
                 </WrapperItemOrder>
               );
             })}
           </WrapperListOrder>
 
-          <img
-            style={{
-              display: data?.length === 0 ? "block" : "none",
-              width: "200px",
-              height: "200px",
-              paddingBottom: "280px",
-              marginLeft: "400px",
-            }}
-            src={imgEmtyCart}
-            alt="imgEmtyCart"
-          />
-        </div>
+          {data?.length === 0 && (
+            <EmptyState>
+              <img src={imgEmtyCart} alt="Chưa có đơn hàng" />
+              <strong>Bạn chưa có đơn hàng nào</strong>
+              <span>Những đơn hàng của bạn sẽ xuất hiện ở đây.</span>
+            </EmptyState>
+          )}
+        </OrderPageShell>
       </WrapperContainer>
     </Loading>
   );
