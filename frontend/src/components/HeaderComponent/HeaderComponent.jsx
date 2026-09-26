@@ -1,17 +1,22 @@
-import { Badge, Col, Popover } from "antd";
+import { Badge, Popover } from "antd";
 import React, { useEffect, useState } from "react";
 import {
+  AccountAvatar,
+  AccountFallback,
+  AccountName,
+  AccountTrigger,
+  CartButton,
+  HeaderActions,
+  HeaderBar,
+  HeaderSearch,
+  LoginButton,
   WrapperHeader,
   WrapperLogoHeader,
   WrapperHeaderAccount,
   WrapperTextHeaderSmall,
   WrapperContentPopover,
 } from "./style";
-import {
-  UserOutlined,
-  CaretDownOutlined,
-  ShoppingCartOutlined,
-} from "@ant-design/icons";
+import { UserOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import ButtonInputSearch from "../ButtonInputSearch/ButtonInputSearch";
 import logo from "../../assets/images/logo.jpg";
 import { useNavigate } from "react-router-dom";
@@ -93,92 +98,56 @@ const HeaderComponent = () => {
   };
 
   return (
-    <div
-      style={{
-        width: "100%",
-        background: "#fff",
-        display: "flex",
-        justifyContent: "center",
-      }}
-    >
+    <HeaderBar>
       <WrapperHeader>
-        <Col span={5}>
-          <WrapperLogoHeader
-            onClick={() => navigate("/")}
-            style={{ cursor: "pointer" }}
-          >
-            <img style={{ width: "200px" }} src={logo} alt="logo-image" />
-          </WrapperLogoHeader>
-        </Col>
-        <Col span={13}>
+        <WrapperLogoHeader onClick={() => navigate("/")}>
+          <img src={logo} alt="Mobile Shop" />
+        </WrapperLogoHeader>
+        <HeaderSearch>
           <ButtonInputSearch
             size="large"
             placeholder="Bạn đang tìm gì?"
             onChange={onSearch}
           />
-        </Col>
-        <Col
-          span={6}
-          style={{ display: "flex", gap: "20px", alignItems: "center" }}
-        >
+        </HeaderSearch>
+        <HeaderActions>
           <Loading isPending={pending}>
             <WrapperHeaderAccount>
               {userAvatar ? (
-                <img
-                  src={userAvatar}
-                  alt="avatar"
-                  style={{
-                    height: "30px",
-                    width: "30px",
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                  }}
-                />
+                <AccountAvatar src={userAvatar} alt="Ảnh đại diện" />
               ) : (
-                <UserOutlined style={{ fontSize: "30px" }} />
+                <AccountFallback>
+                  <UserOutlined />
+                </AccountFallback>
               )}
               {user?.access_token ? (
-                <>
-                  <Popover content={content} trigger="click" open={isOpenPopup}>
-                    <div
-                      style={{
-                        width: "70px",
-                        cursor: "pointer",
-                        paddingTop: "5px",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                      }}
-                      onClick={() => setIsOpenPopup((prev) => !prev)}
-                    >
+                <Popover content={content} trigger="click" open={isOpenPopup}>
+                  <AccountTrigger
+                    onClick={() => setIsOpenPopup((prev) => !prev)}
+                  >
+                    <AccountName>
                       {userName?.length ? userName : user?.email}
-                    </div>
-                  </Popover>
-                </>
+                    </AccountName>
+                  </AccountTrigger>
+                </Popover>
               ) : (
-                <WrapperTextHeaderSmall
-                  onClick={handleNavigateLogin}
-                  style={{ cursor: "pointer" }}
-                >
+                <LoginButton type="button" onClick={handleNavigateLogin}>
                   Đăng nhập
-                </WrapperTextHeaderSmall>
+                </LoginButton>
               )}
             </WrapperHeaderAccount>
           </Loading>
-          <div
-            onClick={() => navigate("/order")}
-            style={{ display: "flex", cursor: "pointer" }}
-          >
+          <CartButton type="button" onClick={() => navigate("/order")}>
             <Badge count={order?.orderItems?.length} size="small">
-              <ShoppingCartOutlined
-                style={{ fontSize: "30px", color: "#000", paddingRight: "5px" }}
-              />
+              <ShoppingCartOutlined />
             </Badge>
-            <WrapperTextHeaderSmall>Giỏ hàng</WrapperTextHeaderSmall>
-          </div>
-        </Col>
+            <WrapperTextHeaderSmall className="header-cart-label">
+              Giỏ hàng
+            </WrapperTextHeaderSmall>
+          </CartButton>
+        </HeaderActions>
       </WrapperHeader>
-    </div>
+    </HeaderBar>
   );
 };
 
