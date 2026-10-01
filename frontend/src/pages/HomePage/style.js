@@ -183,41 +183,108 @@ export const WrapperPromotionImg = styled.div`
 `;
 
 export const WrapperRowFeature = styled.div`
-  display: flex;
-  background-color: #efefef;
-  padding-top: 80px;
-  padding-left: 30px;
-  padding-right: 30px;
+  padding: 54px 24px 46px;
+  border-top: 1px solid #e2ecea;
+  border-bottom: 1px solid #e2ecea;
+  background: linear-gradient(180deg, #f4f8f7 0%, #edf4f2 100%);
+
+  @media (max-width: 560px) {
+    padding: 38px 18px 32px;
+  }
+`;
+
+export const FeatureSectionInner = styled.div`
+  width: min(1280px, 100%);
+  margin: 0 auto;
+`;
+
+export const FeatureSectionHeading = styled.div`
+  margin-bottom: 24px;
+
+  span {
+    color: #0d6b68;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  h2 {
+    margin: 7px 0 0;
+    color: #183544;
+    font-size: 23px;
+    line-height: 1.3;
+  }
+`;
+
+export const FeatureGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+
+  @media (max-width: 980px) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (max-width: 560px) {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
 `;
 
 export const WrapperFeature = styled.div`
-  margin-bottom: 30px;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr);
+  align-content: start;
+  align-items: center;
+  column-gap: 13px;
+  min-height: 148px;
+  padding: 20px 18px;
+  border: 1px solid #e3ecea;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 10px 26px rgba(24, 53, 68, 0.045);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(24, 53, 68, 0.09);
+  }
 
   h3 {
+    margin: 0;
+    color: #183544;
     font-size: 14px;
-    color: #2f2f2f;
+    line-height: 1.4;
   }
 
   p {
-    font-size: 14px;
-    line-height: 22px;
-    color: #6a6a6a;
+    grid-column: 2;
+    margin: 7px 0 0;
+    color: #687b82;
+    font-size: 12px;
+    line-height: 1.65;
+  }
+
+  @media (max-width: 560px) {
+    min-height: 0;
+    padding: 16px;
   }
 `;
 
 export const FeatureIcon = styled.div`
-  display: inline-block;
-  position: relative;
-  margin-bottom: 20px;
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  border-radius: 13px;
+  background: #eaf5f2;
 
-  &:before {
-    content: "";
-    width: 33px;
-    height: 33px;
-    position: absolute;
-    background: rgba(59, 93, 80, 0.2);
-    border-radius: 50%;
-    right: -8px;
-    bottom: 0;
+  img {
+    width: 27px;
+    height: 27px;
+    object-fit: contain;
   }
 `;

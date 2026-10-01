@@ -21,6 +21,9 @@ import {
   WrapperFeature,
   FeatureIcon,
   WrapperRowFeature,
+  FeatureSectionInner,
+  FeatureSectionHeading,
+  FeatureGrid,
   WrapperSubMenuType,
   SubMenuType,
   WrapperType,
@@ -374,91 +377,87 @@ const HomePage = () => {
           </WrapperHeaderProduct>
         </div>
       </div>
-      <WrapperRowFeature>
-        <Col span={6}>
-          <WrapperFeature
-            ref={featureRef}
-            style={{
-              opacity: isFeatureVisible ? 1 : 0,
-              transform: isFeatureVisible
-                ? "translateY(0)"
-                : "translateY(20px)",
-              transition: "opacity 0.5s ease, transform 0.5s ease",
-            }}
-          >
-            <FeatureIcon>
-              <img src={imgfeature1} alt="Image" />
-            </FeatureIcon>
-            <h3>Giao hàng nhanh và miễn phí</h3>
-            <p>
-              Chúng tôi cam kết giao hàng nhanh chóng và hoàn toàn miễn phí đến
-              tay bạn.
-            </p>
-          </WrapperFeature>
-        </Col>
-        <Col span={6}>
-          <WrapperFeature
-            ref={featureRef}
-            style={{
-              opacity: isFeatureVisible ? 1 : 0,
-              transform: isFeatureVisible
-                ? "translateY(0)"
-                : "translateY(20px)",
-              transition: "opacity 0.5s ease, transform 0.5s ease",
-            }}
-          >
-            <FeatureIcon>
-              <img src={imgfeature2} alt="Image" />
-            </FeatureIcon>
-            <h3>Dễ dàng mua sắm</h3>
-            <p>
-              Mua sắm trở nên dễ dàng hơn bao giờ hết với giao diện thân thiện
-              và quy trình thanh toán đơn giản.
-            </p>
-          </WrapperFeature>
-        </Col>
-        <Col span={6}>
-          <WrapperFeature
-            ref={featureRef}
-            style={{
-              opacity: isFeatureVisible ? 1 : 0,
-              transform: isFeatureVisible
-                ? "translateY(0)"
-                : "translateY(20px)",
-              transition: "opacity 0.5s ease, transform 0.5s ease",
-            }}
-          >
-            <FeatureIcon>
-              <img src={imgfeature3} alt="Image" />
-            </FeatureIcon>
-            <h3>Hỗ trợ 24/7</h3>
-            <p>
-              Chúng tôi cung cấp dịch vụ hỗ trợ khách hàng 24/7, sẵn sàng giúp
-              đỡ bạn bất cứ lúc nào.
-            </p>
-          </WrapperFeature>
-        </Col>
-        <Col span={6}>
-          <WrapperFeature
-            ref={featureRef}
-            style={{
-              opacity: isFeatureVisible ? 1 : 0,
-              transform: isFeatureVisible
-                ? "translateY(0)"
-                : "translateY(20px)",
-              transition: "opacity 0.5s ease, transform 0.5s ease",
-            }}
-          >
-            <FeatureIcon>
-              <img src={imgfeature4} alt="Image" />
-            </FeatureIcon>
-            <h3>Trả hàng không rắc rối</h3>
-            <p>
-              Chúng tôi cam kết quy trình trả hàng đơn giản và không rắc
-              rối.{" "}
-            </p>
-          </WrapperFeature>
-        </Col>
+      <WrapperRowFeature ref={featureRef}>
+        <FeatureSectionInner>
+          <FeatureSectionHeading>
+            <span>Trải nghiệm mua sắm</span>
+            <h2>Dịch vụ tận tâm trong từng đơn hàng</h2>
+          </FeatureSectionHeading>
+          <FeatureGrid>
+            <WrapperFeature
+              style={{
+                opacity: isFeatureVisible ? 1 : 0,
+                transform: isFeatureVisible
+                  ? "translateY(0)"
+                  : "translateY(20px)",
+                transition: "opacity 0.5s ease, transform 0.5s ease",
+              }}
+            >
+              <FeatureIcon>
+                <img src={imgfeature1} alt="Image" />
+              </FeatureIcon>
+              <h3>Giao hàng nhanh và miễn phí</h3>
+              <p>
+                Chúng tôi cam kết giao hàng nhanh chóng và hoàn toàn miễn phí
+                đến tay bạn.
+              </p>
+            </WrapperFeature>
+            <WrapperFeature
+              style={{
+                opacity: isFeatureVisible ? 1 : 0,
+                transform: isFeatureVisible
+                  ? "translateY(0)"
+                  : "translateY(20px)",
+                transition: "opacity 0.5s ease, transform 0.5s ease",
+              }}
+            >
+              <FeatureIcon>
+                <img src={imgfeature2} alt="Image" />
+              </FeatureIcon>
+              <h3>Dễ dàng mua sắm</h3>
+              <p>
+                Mua sắm trở nên dễ dàng hơn bao giờ hết với giao diện thân thiện
+                và quy trình thanh toán đơn giản.
+              </p>
+            </WrapperFeature>
+            <WrapperFeature
+              style={{
+                opacity: isFeatureVisible ? 1 : 0,
+                transform: isFeatureVisible
+                  ? "translateY(0)"
+                  : "translateY(20px)",
+                transition: "opacity 0.5s ease, transform 0.5s ease",
+              }}
+            >
+              <FeatureIcon>
+                <img src={imgfeature3} alt="Image" />
+              </FeatureIcon>
+              <h3>Hỗ trợ 24/7</h3>
+              <p>
+                Chúng tôi cung cấp dịch vụ hỗ trợ khách hàng 24/7, sẵn sàng giúp
+                đỡ bạn bất cứ lúc nào.
+              </p>
+            </WrapperFeature>
+            <WrapperFeature
+              style={{
+                opacity: isFeatureVisible ? 1 : 0,
+                transform: isFeatureVisible
+                  ? "translateY(0)"
+                  : "translateY(20px)",
+                transition: "opacity 0.5s ease, transform 0.5s ease",
+              }}
+            >
+              <FeatureIcon>
+                <img src={imgfeature4} alt="Image" />
+              </FeatureIcon>
+              <h3>Trả hàng không rắc rối</h3>
+              <p>
+                Chúng tôi cam kết quy trình trả hàng đơn giản và không rắc
+                rối.{" "}
+              </p>
+            </WrapperFeature>
+          </FeatureGrid>
+        </FeatureSectionInner>
       </WrapperRowFeature>
       <div
         style={{
