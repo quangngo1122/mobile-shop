@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { FiChevronDown, FiHome, FiSmartphone } from "react-icons/fi";
 import {
   ArticleBody,
   ArticleCard,
@@ -28,13 +27,18 @@ import {
   SideStory,
   SideStoryImage,
   SideStoryText,
-  TopicBar,
-  TopicBarInner,
   TopicLabel,
-  TypeDropdown,
-  TypeMenu,
-  TypeMenuItem,
 } from "./style";
+import {
+  SubMenuType,
+  WrapperSubMenuType,
+  WrapperType as HomeMenuItem,
+  WrapperTypeProduct,
+} from "../HomePage/style";
+import iconMenu1 from "../../assets/images/icons8-home-24.png";
+import iconMenu2 from "../../assets/images/icons8-phone-case-50.png";
+import iconMenu3 from "../../assets/images/icons8-sort-down-24.png";
+import iconMenu4 from "../../assets/images/icons8-news-30.png";
 import imgNews1 from "../../assets/images/samsung-galaxy-z-flip6-didongmy.jpg";
 import imgNews2 from "../../assets/images/km apple.jpg";
 import imgNews3 from "../../assets/images/km samsung.jpg";
@@ -123,33 +127,68 @@ const NewsPage = () => {
 
   return (
     <NewsPageShell>
-      <TopicBar>
-        <TopicBarInner>
-          <TypeMenu onClick={() => navigate("/")}>
-            <FiHome aria-hidden="true" />
-            <span>Trang chủ</span>
-          </TypeMenu>
-          <TypeDropdown>
-            <TypeMenuItem>
-              <FiSmartphone aria-hidden="true" />
-              <span>Điện thoại</span>
-              <FiChevronDown className="chevron" aria-hidden="true" />
-            </TypeMenuItem>
-            <TypeMenu>
+      <div style={{ width: "100%", margin: "0 auto", background: "#183544" }}>
+        <WrapperTypeProduct>
+          <HomeMenuItem onClick={() => navigate("/")}>
+            <img
+              style={{
+                width: "18px",
+                height: "18px",
+                position: "absolute",
+                left: "3px",
+                top: "13px",
+              }}
+              src={iconMenu1}
+              alt="iconMenu1"
+            />
+            <span style={{ paddingLeft: "5px" }}>Trang Chủ</span>
+          </HomeMenuItem>
+          <WrapperSubMenuType>
+            <img
+              style={{
+                width: "16px",
+                height: "16px",
+                position: "absolute",
+                left: "3px",
+                top: "13px",
+              }}
+              src={iconMenu2}
+              alt="iconMenu2"
+            />
+            <span style={{ paddingLeft: "5px" }}>Điện Thoại</span>
+            <img
+              style={{
+                width: "22px",
+                height: "22px",
+                position: "absolute",
+                right: "0",
+                top: "10px",
+              }}
+              src={iconMenu3}
+              alt="iconMenu3"
+            />
+            <SubMenuType className="subMenuType">
               {typeProducts.map((item) => (
                 <TypeProduct name={item} key={item} />
               ))}
-            </TypeMenu>
-          </TypeDropdown>
-          <TypeMenu
-            className="active"
-            onClick={handleNavigateNews}
-            aria-current="page"
-          >
-            Tin tức
-          </TypeMenu>
-        </TopicBarInner>
-      </TopicBar>
+            </SubMenuType>
+          </WrapperSubMenuType>
+          <HomeMenuItem onClick={handleNavigateNews}>
+            <img
+              style={{
+                width: "16px",
+                height: "16px",
+                position: "absolute",
+                left: "3px",
+                top: "13px",
+              }}
+              src={iconMenu4}
+              alt="iconMenu4"
+            />
+            <span style={{ paddingLeft: "5px" }}>Tin Tức</span>
+          </HomeMenuItem>
+        </WrapperTypeProduct>
+      </div>
 
       <PageContent>
         <Breadcrumb>
