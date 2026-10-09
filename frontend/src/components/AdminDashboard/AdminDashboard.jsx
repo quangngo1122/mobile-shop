@@ -2,10 +2,13 @@ import React from "react";
 import {
   AreaChart,
   Area,
+  Bar,
+  BarChart,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
   ResponsiveContainer,
 } from "recharts";
 import {
@@ -65,6 +68,7 @@ const AdminDashboard = () => {
   const { isPending: isPendingUsers, data: users } = queryUser;
   const { isPending: isPendingProducts, data: products } = queryProduct;
   const { isPending: isPendingOrders, data: orders } = queryOrder;
+  const orderList = Array.isArray(orders?.data) ? orders.data : [];
 
   const { ref: cardRef, inView: isCardVisible } = useInView({
     threshold: 0.1,
@@ -86,6 +90,62 @@ const AdminDashboard = () => {
         return acc;
       }, [])
     : [];
+
+  const revenueByMonth = orderList
+    .reduce((monthlyTotals, order) => {
+      const orderDate = new Date(order.createdAt);
+      if (Number.isNaN(orderDate.getTime())) {
+        return monthlyTotals;
+      }
+
+      const monthKey = `${orderDate.getFullYear()}-${String(
+        orderDate.getMonth() + 1,
+      ).padStart(2, "0")}`;
+      const month = monthlyTotals.find((item) => item.monthKey === monthKey);
+      const paidRevenue = order.isPaid ? Number(order.totalPrice) || 0 : 0;
+
+      if (month) {
+        month.revenue += paidRevenue;
+        month.orderCount += 1;
+      } else {
+        monthlyTotals.push({
+          monthKey,
+          month: new Intl.DateTimeFormat("vi-VN", {
+            month: "short",
+            year: "numeric",
+          }).format(orderDate),
+          revenue: paidRevenue,
+          orderCount: 1,
+        });
+      }
+      return monthlyTotals;
+    }, [])
+    .sort((first, second) => first.monthKey.localeCompare(second.monthKey));
+
+  const orderStatusData = [
+    {
+      status: "Thanh toán",
+      completed: orderList.filter((order) => order.isPaid).length,
+      pending: orderList.filter((order) => !order.isPaid).length,
+    },
+    {
+      status: "Giao hàng",
+      completed: orderList.filter((order) => order.isDelivered).length,
+      pending: orderList.filter((order) => !order.isDelivered).length,
+    },
+  ];
+
+  const formatCurrency = (value) =>
+    `${Number(value).toLocaleString("vi-VN")} ₫`;
+  const formatCompactCurrency = (value) => {
+    if (value >= 1_000_000_000) {
+      return `${(value / 1_000_000_000).toFixed(1)} tỷ`;
+    }
+    if (value >= 1_000_000) {
+      return `${(value / 1_000_000).toFixed(0)} tr`;
+    }
+    return value.toLocaleString("vi-VN");
+  };
 
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
@@ -167,6 +227,84 @@ const AdminDashboard = () => {
           <ChartPanel>
             <ChartHeader>
               <div>
+                <ChartTitle>Doanh thu đã thanh toán</ChartTitle>
+                <ChartDescription>
+                  Tổng giá trị các đơn đã thanh toán theo tháng.
+                </ChartDescription>
+              </div>
+            </ChartHeader>
+            <ChartCanvas>
+              <ResponsiveContainer>
+                <AreaChart
+                  data={revenueByMonth}
+                  margin={{ top: 10, right: 16, left: 8, bottom: 0 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e6eded" />
+                  <XAxis dataKey="month" tick={{ fontSize: 11 }} />
+                  <YAxis
+                    tickFormatter={formatCompactCurrency}
+                    tick={{ fontSize: 11 }}
+                    width={62}
+                  />
+                  <Tooltip
+                    formatter={(value) => [formatCurrency(value), "Doanh thu"]}
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="revenue"
+                    name="Doanh thu"
+                    stroke="#287e78"
+                    strokeWidth={2.5}
+                    fill="#c5e7df"
+                    activeDot={{ r: 5 }}
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </ChartCanvas>
+          </ChartPanel>
+
+          <ChartPanel>
+            <ChartHeader>
+              <div>
+                <ChartTitle>Tiến độ đơn hàng</ChartTitle>
+                <ChartDescription>
+                  So sánh số đơn hoàn tất và đang chờ xử lý.
+                </ChartDescription>
+              </div>
+            </ChartHeader>
+            <ChartCanvas>
+              <ResponsiveContainer>
+                <BarChart
+                  data={orderStatusData}
+                  margin={{ top: 10, right: 12, left: 0, bottom: 0 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e6eded" />
+                  <XAxis dataKey="status" tick={{ fontSize: 11 }} />
+                  <YAxis allowDecimals={false} tick={{ fontSize: 11 }} />
+                  <Tooltip />
+                  <Legend />
+                  <Bar
+                    dataKey="completed"
+                    name="Hoàn tất"
+                    stackId="orders"
+                    fill="#287e78"
+                    radius={[4, 4, 0, 0]}
+                  />
+                  <Bar
+                    dataKey="pending"
+                    name="Đang chờ"
+                    stackId="orders"
+                    fill="#eaa34b"
+                    radius={[4, 4, 0, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </ChartCanvas>
+          </ChartPanel>
+
+          <ChartPanel>
+            <ChartHeader>
+              <div>
                 <ChartTitle>Số lượng sản phẩm</ChartTitle>
                 <ChartDescription>
                   Tồn kho được phân bổ theo từng danh mục.
@@ -210,7 +348,7 @@ const AdminDashboard = () => {
               </div>
             </ChartHeader>
             <PieCanvas>
-              <PieChartComponent data={orders?.data} />
+              <PieChartComponent data={orderList} />
             </PieCanvas>
           </ChartPanel>
         </ChartGrid>
