@@ -329,27 +329,35 @@ const AdminProduct = () => {
 
   useEffect(() => {
     if (isSuccess && data?.status === "OK") {
-      message.success();
+      message.success("Sản phẩm đã được tạo thành công.");
       handleCancel();
+    } else if (isSuccess) {
+      message.warning("Máy chủ chưa xác nhận việc tạo sản phẩm.");
     } else if (isError) {
-      message.error();
+      message.error(
+        "Không thể tạo sản phẩm. Vui lòng kiểm tra dữ liệu và thử lại.",
+      );
     }
   }, [isSuccess]);
 
   useEffect(() => {
     if (isSuccessDelectedMany && dataDeletedMany?.status === "OK") {
-      message.success();
+      message.success("Các sản phẩm đã chọn đã được xóa.");
+    } else if (isSuccessDelectedMany) {
+      message.warning("Máy chủ chưa xác nhận việc xóa sản phẩm.");
     } else if (isErrorDeletedMany) {
-      message.error();
+      message.error("Không thể xóa các sản phẩm đã chọn. Vui lòng thử lại.");
     }
   }, [isSuccessDelectedMany]);
 
   useEffect(() => {
     if (isSuccessDelected && dataDeleted?.status === "OK") {
-      message.success();
+      message.success("Sản phẩm đã được xóa.");
       handleCancelDelete();
+    } else if (isSuccessDelected) {
+      message.warning("Máy chủ chưa xác nhận việc xóa sản phẩm.");
     } else if (isErrorDeleted) {
-      message.error();
+      message.error("Không thể xóa sản phẩm. Vui lòng thử lại.");
     }
   }, [isSuccessDelected]);
 
@@ -371,10 +379,14 @@ const AdminProduct = () => {
 
   useEffect(() => {
     if (isSuccessUpdated && dataUpdated?.status === "OK") {
-      message.success();
+      message.success("Thông tin sản phẩm đã được cập nhật.");
       handleCloseDrawer();
+    } else if (isSuccessUpdated) {
+      message.warning("Máy chủ chưa xác nhận việc cập nhật sản phẩm.");
     } else if (isErrorUpdated) {
-      message.error();
+      message.error(
+        "Không thể cập nhật sản phẩm. Vui lòng kiểm tra lại thông tin.",
+      );
     }
   }, [isSuccessUpdated]);
 

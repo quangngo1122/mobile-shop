@@ -294,18 +294,22 @@ const AdminUser = () => {
 
   useEffect(() => {
     if (isSuccessDelectedMany && dataDeletedMany?.status === "OK") {
-      message.success();
+      message.success("Các tài khoản đã chọn đã được xóa.");
+    } else if (isSuccessDelectedMany) {
+      message.warning("Máy chủ chưa xác nhận việc xóa tài khoản.");
     } else if (isErrorDeletedMany) {
-      message.error();
+      message.error("Không thể xóa các tài khoản đã chọn. Vui lòng thử lại.");
     }
   }, [isSuccessDelectedMany]);
 
   useEffect(() => {
     if (isSuccessDelected && dataDeleted?.status === "OK") {
-      message.success();
+      message.success("Tài khoản đã được xóa.");
       handleCancelDelete();
+    } else if (isSuccessDelected) {
+      message.warning("Máy chủ chưa xác nhận việc xóa tài khoản.");
     } else if (isErrorDeleted) {
-      message.error();
+      message.error("Không thể xóa tài khoản. Vui lòng thử lại.");
     }
   }, [isSuccessDelected]);
 
@@ -324,10 +328,14 @@ const AdminUser = () => {
 
   useEffect(() => {
     if (isSuccessUpdated && dataUpdated?.status === "OK") {
-      message.success();
+      message.success("Thông tin tài khoản đã được cập nhật.");
       handleCloseDrawer();
+    } else if (isSuccessUpdated) {
+      message.warning("Máy chủ chưa xác nhận việc cập nhật tài khoản.");
     } else if (isErrorUpdated) {
-      message.error();
+      message.error(
+        "Không thể cập nhật tài khoản. Vui lòng kiểm tra lại thông tin.",
+      );
     }
   }, [isSuccessUpdated]);
 
