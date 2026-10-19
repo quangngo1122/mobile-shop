@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   BrandDescription,
   BrandEyebrow,
@@ -32,6 +32,19 @@ import { useMutationHooks } from "../../hooks/useMutationHook";
 import Loading from "../../components/LoadingComponent/Loading";
 import * as message from "../../components/Message/Message";
 
+const getSignUpErrorMessage = (serverMessage) => {
+  if (serverMessage === "Email already exists") {
+    return "Email này đã được sử dụng. Vui lòng chọn email khác.";
+  }
+  if (serverMessage === "Passwords do not match") {
+    return "Mật khẩu xác nhận chưa khớp.";
+  }
+  if (serverMessage === "Please provide all required fields") {
+    return "Vui lòng điền đầy đủ thông tin.";
+  }
+  return "Không thể tạo tài khoản. Vui lòng kiểm tra thông tin và thử lại.";
+};
+
 const SignUpPage = () => {
   const navigate = useNavigate();
   const [isShowPassword, setIsShowPassword] = useState(false);
@@ -41,16 +54,7 @@ const SignUpPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const mutation = useMutationHooks((data) => UserService.signupUser(data));
-  const { data, isPending, isSuccess, isError } = mutation;
-
-  useEffect(() => {
-    if (isSuccess) {
-      message.success();
-      handleNavigateSignIn();
-    } else if (isError) {
-      message.error();
-    }
-  }, [isSuccess, isError]);
+  const { isPending } = mutation;
 
   const handleOnchangeEmail = (value) => {
     setEmail(value);
@@ -69,7 +73,27 @@ const SignUpPage = () => {
   };
 
   const handleSignUp = () => {
-    mutation.mutate({ email, password, confirmPassword });
+    mutation.mutate(
+      { email, password, confirmPassword },
+      {
+        onSuccess: (response) => {
+          if (response?.status !== "OK") {
+            message.error(getSignUpErrorMessage(response?.message));
+            return;
+          }
+          message.success("Đăng ký thành công. Hãy đăng nhập để tiếp tục.");
+          handleNavigateSignIn();
+        },
+        onError: (requestError) => {
+          const serverMessage = requestError?.response?.data?.message;
+          if (serverMessage) {
+            message.error(getSignUpErrorMessage(serverMessage));
+          } else {
+            message.error("Không thể kết nối đến máy chủ. Vui lòng thử lại.");
+          }
+        },
+      },
+    );
   };
 
   return (
@@ -140,9 +164,6 @@ const SignUpPage = () => {
               </button>
             </PasswordField>
           </FieldGroup>
-          {data?.status === "ERR" && (
-            <span style={{ color: "red" }}>{data?.message}</span>
-          )}
           <Loading isPending={isPending}>
             <ButtonComponent
               isDisabled={

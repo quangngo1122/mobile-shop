@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   BrandDescription,
   BrandEyebrow,
@@ -33,6 +33,7 @@ import Loading from "../../components/LoadingComponent/Loading";
 import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";
 import { updateUser } from "../../redux/slides/userSlide";
+import * as message from "../../components/Message/Message";
 
 const SignInPage = () => {
   const navigate = useNavigate();
@@ -43,24 +44,7 @@ const SignInPage = () => {
   const dispatch = useDispatch();
 
   const mutation = useMutationHooks((data) => UserService.loginUser(data));
-  const { data, isPending, isSuccess } = mutation;
-
-  useEffect(() => {
-    if (isSuccess) {
-      if (location?.state) {
-        navigate(location?.state);
-      } else {
-        navigate("/");
-      }
-      localStorage.setItem("access_token", JSON.stringify(data?.access_token));
-      if (data?.access_token) {
-        const decoded = jwtDecode(data?.access_token);
-        if (decoded?.id) {
-          handleGetDetailsUser(decoded?.id, data?.access_token);
-        }
-      }
-    }
-  }, [isSuccess]);
+  const { isPending } = mutation;
 
   const handleGetDetailsUser = async (id, token) => {
     const res = await UserService.getDetailsUser(id, token);
@@ -80,10 +64,38 @@ const SignInPage = () => {
   };
 
   const handleSignIn = () => {
-    mutation.mutate({
-      email,
-      password,
-    });
+    mutation.mutate(
+      {
+        email,
+        password,
+      },
+      {
+        onSuccess: (response) => {
+          if (response?.status !== "OK" || !response?.access_token) {
+            message.error("Email hoặc mật khẩu không chính xác.");
+            return;
+          }
+
+          message.success("Đăng nhập thành công.");
+          localStorage.setItem(
+            "access_token",
+            JSON.stringify(response.access_token),
+          );
+          const decoded = jwtDecode(response.access_token);
+          if (decoded?.id) {
+            handleGetDetailsUser(decoded.id, response.access_token);
+          }
+          navigate(location?.state || "/");
+        },
+        onError: (requestError) => {
+          if (requestError?.response) {
+            message.error("Email hoặc mật khẩu không chính xác.");
+          } else {
+            message.error("Không thể kết nối đến máy chủ. Vui lòng thử lại.");
+          }
+        },
+      },
+    );
   };
   return (
     <SignInPageWrapper>
@@ -127,9 +139,6 @@ const SignInPage = () => {
               </button>
             </PasswordField>
           </FieldGroup>
-          {data?.status === "ERR" && (
-            <span style={{ color: "red" }}>{data?.message}</span>
-          )}
           <Loading isPending={isPending}>
             <ButtonComponent
               isDisabled={!email.length || !password.length}
