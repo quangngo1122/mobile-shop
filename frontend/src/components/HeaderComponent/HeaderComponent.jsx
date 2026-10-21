@@ -25,6 +25,7 @@ import * as UserService from "../../services/UserService";
 import { resetUser } from "../../redux/slides/userSlide";
 import Loading from "../LoadingComponent/Loading";
 import { searchProduct } from "../../redux/slides/productSlide";
+import * as message from "../Message/Message";
 
 const HeaderComponent = () => {
   const navigate = useNavigate();
@@ -41,10 +42,22 @@ const HeaderComponent = () => {
   };
   const handleLogout = async () => {
     setPending(true);
-    await UserService.logoutUser();
-    dispatch(resetUser());
-    setPending(false);
-    navigate("/");
+    try {
+      const response = await UserService.logoutUser();
+      if (response?.status !== "OK") {
+        message.error("Không thể đăng xuất. Vui lòng thử lại.");
+        return;
+      }
+
+      localStorage.removeItem("access_token");
+      dispatch(resetUser());
+      message.success("Bạn đã đăng xuất thành công.");
+      navigate("/");
+    } catch (error) {
+      message.error("Không thể kết nối đến máy chủ để đăng xuất.");
+    } finally {
+      setPending(false);
+    }
   };
 
   useEffect(() => {
