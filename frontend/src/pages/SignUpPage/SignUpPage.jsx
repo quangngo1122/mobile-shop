@@ -72,7 +72,10 @@ const SignUpPage = () => {
     navigate("/sign-in");
   };
 
-  const handleSignUp = () => {
+  const handleSignUp = (event) => {
+    event.preventDefault();
+    if (isPending) return;
+
     mutation.mutate(
       { email, password, confirmPassword },
       {
@@ -105,89 +108,97 @@ const SignUpPage = () => {
           <FormSubtitle>
             Tham gia Phone Plaza để bắt đầu hành trình mua sắm.
           </FormSubtitle>
-          <FieldGroup>
-            <FieldLabel htmlFor="signup-email">Email</FieldLabel>
-            <InputForm
-              id="signup-email"
-              size="large"
-              prefix={<MailOutlined />}
-              placeholder="name@example.com"
-              value={email}
-              onChange={handleOnchangeEmail}
-            />
-          </FieldGroup>
-          <FieldGroup>
-            <FieldLabel htmlFor="signup-password">Mật khẩu</FieldLabel>
-            <PasswordField>
+          <form onSubmit={handleSignUp}>
+            <FieldGroup>
+              <FieldLabel htmlFor="signup-email">Email</FieldLabel>
               <InputForm
-                id="signup-password"
+                id="signup-email"
                 size="large"
-                prefix={<LockOutlined />}
-                placeholder="Tạo mật khẩu"
-                type={isShowPassword ? "text" : "password"}
-                value={password}
-                onChange={handleOnchangePassword}
+                prefix={<MailOutlined />}
+                placeholder="name@example.com"
+                value={email}
+                onChange={handleOnchangeEmail}
               />
-              <button
-                type="button"
-                className="password-toggle"
-                aria-label={isShowPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
-                onClick={() => setIsShowPassword(!isShowPassword)}
-              >
-                {isShowPassword ? <EyeFilled /> : <EyeInvisibleFilled />}
-              </button>
-            </PasswordField>
-          </FieldGroup>
-          <FieldGroup>
-            <FieldLabel htmlFor="signup-confirm-password">
-              Xác nhận mật khẩu
-            </FieldLabel>
-            <PasswordField>
-              <InputForm
-                id="signup-confirm-password"
-                size="large"
-                prefix={<LockOutlined />}
-                placeholder="Nhập lại mật khẩu"
-                type={isShowConfirmPassword ? "text" : "password"}
-                value={confirmPassword}
-                onChange={handleOnchangeConfirmPassword}
-              />
-              <button
-                type="button"
-                className="password-toggle"
-                aria-label={
-                  isShowConfirmPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"
+            </FieldGroup>
+            <FieldGroup>
+              <FieldLabel htmlFor="signup-password">Mật khẩu</FieldLabel>
+              <PasswordField>
+                <InputForm
+                  id="signup-password"
+                  size="large"
+                  prefix={<LockOutlined />}
+                  placeholder="Tạo mật khẩu"
+                  type={isShowPassword ? "text" : "password"}
+                  value={password}
+                  onChange={handleOnchangePassword}
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  aria-label={isShowPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+                  onClick={() => setIsShowPassword(!isShowPassword)}
+                >
+                  {isShowPassword ? <EyeFilled /> : <EyeInvisibleFilled />}
+                </button>
+              </PasswordField>
+            </FieldGroup>
+            <FieldGroup>
+              <FieldLabel htmlFor="signup-confirm-password">
+                Xác nhận mật khẩu
+              </FieldLabel>
+              <PasswordField>
+                <InputForm
+                  id="signup-confirm-password"
+                  size="large"
+                  prefix={<LockOutlined />}
+                  placeholder="Nhập lại mật khẩu"
+                  type={isShowConfirmPassword ? "text" : "password"}
+                  value={confirmPassword}
+                  onChange={handleOnchangeConfirmPassword}
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  aria-label={
+                    isShowConfirmPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"
+                  }
+                  onClick={() =>
+                    setIsShowConfirmPassword(!isShowConfirmPassword)
+                  }
+                >
+                  {isShowConfirmPassword ? (
+                    <EyeFilled />
+                  ) : (
+                    <EyeInvisibleFilled />
+                  )}
+                </button>
+              </PasswordField>
+            </FieldGroup>
+            <Loading isPending={isPending}>
+              <ButtonComponent
+                isDisabled={
+                  !email.length || !password.length || !confirmPassword.length
                 }
-                onClick={() => setIsShowConfirmPassword(!isShowConfirmPassword)}
-              >
-                {isShowConfirmPassword ? <EyeFilled /> : <EyeInvisibleFilled />}
-              </button>
-            </PasswordField>
-          </FieldGroup>
-          <Loading isPending={isPending}>
-            <ButtonComponent
-              isDisabled={
-                !email.length || !password.length || !confirmPassword.length
-              }
-              onClick={handleSignUp}
-              size={40}
-              styleButton={{
-                background: "#0d6b68",
-                height: "50px",
-                width: "100%",
-                border: "none",
-                borderRadius: "8px",
-                margin: "2px 0 20px",
-                boxShadow: "0 10px 18px rgba(13, 107, 104, 0.2)",
-              }}
-              textbutton={"Đăng ký"}
-              styletextbutton={{
-                color: "#fff",
-                fontSize: "15px",
-                fontWeight: "700",
-              }}
-            ></ButtonComponent>
-          </Loading>
+                htmlType="submit"
+                size={40}
+                styleButton={{
+                  background: "#0d6b68",
+                  height: "50px",
+                  width: "100%",
+                  border: "none",
+                  borderRadius: "8px",
+                  margin: "2px 0 20px",
+                  boxShadow: "0 10px 18px rgba(13, 107, 104, 0.2)",
+                }}
+                textbutton={"Đăng ký"}
+                styletextbutton={{
+                  color: "#fff",
+                  fontSize: "15px",
+                  fontWeight: "700",
+                }}
+              ></ButtonComponent>
+            </Loading>
+          </form>
           <FormFooter>
             <span>Đã có tài khoản?</span>
             <WrapperTextLight onClick={handleNavigateSignIn}>
