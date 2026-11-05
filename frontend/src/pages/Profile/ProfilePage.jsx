@@ -105,7 +105,8 @@ const ProfilePage = () => {
     setAvatar(file.preview);
   };
 
-  const handleUpdate = () => {
+  const handleUpdate = (event) => {
+    event.preventDefault();
     mutation.mutate({
       id: user?.id,
       email,
@@ -148,7 +149,7 @@ const ProfilePage = () => {
                 <Button icon={<UploadOutlined />}>Đổi ảnh đại diện</Button>
               </WrapperUploadFile>
             </ProfileAside>
-            <ProfileForm>
+            <ProfileForm as="form" onSubmit={handleUpdate}>
               <FormSectionTitle>Thông tin tài khoản</FormSectionTitle>
               <FormGrid>
                 <FormField>
@@ -226,9 +227,7 @@ const ProfilePage = () => {
                 <StatusMessage>{data?.message}</StatusMessage>
               )}
               <FormActions>
-                <SaveButton type="button" onClick={handleUpdate}>
-                  Lưu thay đổi
-                </SaveButton>
+                <SaveButton type="submit">Lưu thay đổi</SaveButton>
               </FormActions>
             </ProfileForm>
           </ProfileContent>

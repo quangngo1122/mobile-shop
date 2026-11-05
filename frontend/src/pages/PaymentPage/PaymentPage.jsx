@@ -218,11 +218,11 @@ const PaymentPage = () => {
     });
   };
 
-  const handleUpdateInfoUser = () => {
-    const { name, address, phone, city } = stateUserDetails;
+  const handleUpdateInfoUser = (values = stateUserDetails) => {
+    const { name, address, phone, city } = values;
     if (name && address && phone && city) {
       mutationUpdate.mutate(
-        { id: user?.id, token: user?.access_token, ...stateUserDetails },
+        { id: user?.id, token: user?.access_token, ...values },
         {
           onSuccess: () => {
             dispatch(updateUser({ name, address, phone, city }));
@@ -423,7 +423,7 @@ const PaymentPage = () => {
           title="Cập nhật thông tin giao hàng"
           open={isOpenModalUpdateInfo}
           onCancel={handleCancelUpdate}
-          onOk={handleUpdateInfoUser}
+          onOk={() => form.submit()}
         >
           <Loading isPending={isPending}>
             <Form
@@ -432,6 +432,7 @@ const PaymentPage = () => {
               wrapperCol={{ span: 19 }}
               autoComplete="on"
               form={form}
+              onFinish={handleUpdateInfoUser}
             >
               <Form.Item
                 label="Tên"
