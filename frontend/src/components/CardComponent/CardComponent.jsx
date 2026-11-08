@@ -1,21 +1,22 @@
 import React from "react";
 import {
+  ProductAction,
+  ProductBadge,
+  ProductDiscountBadge,
+  ProductImageWrap,
   StyleNameProduct,
   WrapperCardStyle,
-  WrapperDiscountText,
   WrapperPriceText,
   WrapperReportText,
   WrapperStyleTextSell,
 } from "./style";
-import { StarFilled } from "@ant-design/icons";
-import logo from "../../assets/images/official.png";
+import { ArrowRightOutlined, StarFilled } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { convertPrice } from "../../utils";
 
 const CardComponent = (props) => {
   const {
     countInStock,
-    description,
     image,
     name,
     price,
@@ -29,43 +30,44 @@ const CardComponent = (props) => {
   const handleDetailsProduct = (id) => {
     navigate(`/product-details/${id}`);
   };
+  const discountPercent = discount || 5;
+
   return (
     <WrapperCardStyle
       hoverable
-      style={{ width: 230 }}
       cover={
-        <img
-          alt="example"
-          src={image}
-          style={{ witdh: "100%", height: "250px", paddingTop: "20px" }}
-        />
+        <ProductImageWrap>
+          <img alt={name} src={image} loading="lazy" />
+          <ProductBadge>{type || "Điện thoại"}</ProductBadge>
+          <ProductDiscountBadge>Giảm {discountPercent}%</ProductDiscountBadge>
+        </ProductImageWrap>
       }
       onClick={() => handleDetailsProduct(id)}
     >
-      <img
-        src={logo}
-        style={{
-          width: "68px",
-          height: "14px",
-          position: "absolute",
-          bottom: "110px",
-          left: "7px",
-          borderTopLeftRadius: "3px",
-        }}
-        alt="official-logo"
-      />
       <StyleNameProduct>{name}</StyleNameProduct>
       <WrapperReportText>
-        <span style={{ marginRight: "4px" }}>
-          <span>{rating}</span>{" "}
-          <StarFilled style={{ fontSize: "12px", color: "rgb(253, 216, 54" }} />
+        <span>
+          <StarFilled style={{ fontSize: "12px", color: "#f5b400" }} />{" "}
+          {Number(rating) > 0 ? Number(rating).toFixed(1) : "Mới"}
         </span>
-        <WrapperStyleTextSell> | Đã bán {selled || 0}</WrapperStyleTextSell>
+        <WrapperStyleTextSell>Đã bán {selled || 0}</WrapperStyleTextSell>
+        {countInStock > 0 && (
+          <WrapperStyleTextSell>• Còn hàng</WrapperStyleTextSell>
+        )}
       </WrapperReportText>
       <WrapperPriceText>
-        <span>{convertPrice(price)}</span>
-        <WrapperDiscountText>- {discount || 5} %</WrapperDiscountText>
+        {convertPrice(price)}
       </WrapperPriceText>
+      <ProductAction
+        type="button"
+        aria-label={`Xem chi tiết ${name}`}
+        onClick={(event) => {
+          event.stopPropagation();
+          handleDetailsProduct(id);
+        }}
+      >
+        Xem chi tiết <ArrowRightOutlined />
+      </ProductAction>
     </WrapperCardStyle>
   );
 };

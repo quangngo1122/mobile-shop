@@ -2,11 +2,16 @@ import { Col } from "antd";
 import styled from "styled-components";
 
 export const WrapperProducts = styled.div`
-  display: flex;
-  gap: 15px;
-  justify-content: left;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+  align-items: stretch;
+  gap: 16px;
   padding-top: 20px;
+
+  @media (max-width: 560px) {
+    gap: 10px;
+    padding-top: 14px;
+  }
 `;
 
 export const WrapperTypeProduct = styled.div`

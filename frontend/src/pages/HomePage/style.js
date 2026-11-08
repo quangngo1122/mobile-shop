@@ -166,13 +166,19 @@ export const HeaderProduct = styled.div`
 `;
 
 export const WrapperProducts = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+  align-items: stretch;
+  gap: 16px;
+  margin: 10px 5px 0;
+  padding: 8px 14px 14px;
   background: #efefef;
-  margin-top: 10px;
-  margin-left: 5px;
-  gap: 10px;
-  justify-content: left;
-  flex-wrap: wrap;
+
+  @media (max-width: 560px) {
+    gap: 10px;
+    margin: 8px 0 0;
+    padding: 8px;
+  }
 `;
 
 export const WrapperPromotionImg = styled.div`

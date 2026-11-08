@@ -142,7 +142,13 @@ const TypeProductPage = () => {
             margin: "0 auto",
           }}
         >
-          <div style={{ width: "1024px", margin: "0 auto", height: "100%" }}>
+          <div
+            style={{
+              width: "min(1200px, calc(100% - 32px))",
+              margin: "0 auto",
+              height: "100%",
+            }}
+          >
             <WrapperProducts>
               {products
                 ?.filter((pro) => {
