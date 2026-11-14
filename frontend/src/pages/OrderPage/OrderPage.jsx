@@ -80,8 +80,15 @@ const OrderPage = () => {
         : decreaseAmount({ idProduct }),
     );
   };
-  const handleDeleteOrder = (idProduct) =>
+  const handleDeleteOrder = (idProduct) => {
+    const item = order?.orderItems?.find(
+      (orderItem) => orderItem?.product === idProduct,
+    );
+    if (!item) return;
+
     dispatch(removeOrderProduct({ idProduct }));
+    message.success(`Đã xóa "${item.name}" khỏi giỏ hàng.`);
+  };
   const handleOnchangeCheckAll = (e) =>
     setListChecked(
       e.target.checked
@@ -136,8 +143,11 @@ const OrderPage = () => {
     [priceMemo, discountMemo, deliveryPriceMemo],
   );
   const handleRemoveAllOrder = () => {
-    if (listChecked?.length > 0)
+    if (listChecked?.length > 0) {
+      const removedCount = listChecked.length;
       dispatch(removeAllOrderProduct({ listChecked }));
+      message.success(`Đã xóa ${removedCount} sản phẩm khỏi giỏ hàng.`);
+    }
   };
   const handleAddCard = () => {
     if (!order?.orderItemsSelected?.length)

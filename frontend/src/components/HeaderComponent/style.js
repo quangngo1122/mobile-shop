@@ -160,9 +160,10 @@ export const AccountFallback = styled.span`
   flex: 0 0 34px;
   place-items: center;
   border-radius: 50%;
-  background: #e8f6f4;
-  color: #0d6b68;
-  font-size: 17px;
+  background: #168aad;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
 `;
 
 export const AccountName = styled.span`

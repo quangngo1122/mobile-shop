@@ -16,7 +16,7 @@ import {
   WrapperTextHeaderSmall,
   WrapperContentPopover,
 } from "./style";
-import { UserOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import { ShoppingCartOutlined } from "@ant-design/icons";
 import ButtonInputSearch from "../ButtonInputSearch/ButtonInputSearch";
 import logo from "../../assets/images/logo.jpg";
 import { useNavigate } from "react-router-dom";
@@ -33,6 +33,12 @@ const HeaderComponent = () => {
   const dispatch = useDispatch();
   const [userName, setUserName] = useState("");
   const [userAvatar, setUserAvatar] = useState("");
+  const [avatarFailed, setAvatarFailed] = useState(false);
+  const accountInitial = (
+    userName?.trim()?.[0] ||
+    user?.email?.trim()?.[0] ||
+    "U"
+  ).toLocaleUpperCase("vi-VN");
   const [search, setSearch] = useState("");
   const [isOpenPopup, setIsOpenPopup] = useState("");
   const order = useSelector((state) => state.order);
@@ -64,6 +70,7 @@ const HeaderComponent = () => {
     setPending(true);
     setUserName(user?.name);
     setUserAvatar(user?.avatar);
+    setAvatarFailed(false);
     setPending(false);
   }, [user?.name, user?.avatar]);
 
@@ -126,11 +133,15 @@ const HeaderComponent = () => {
         <HeaderActions>
           <Loading isPending={pending}>
             <WrapperHeaderAccount>
-              {userAvatar ? (
-                <AccountAvatar src={userAvatar} alt="Ảnh đại diện" />
+              {userAvatar && !avatarFailed ? (
+                <AccountAvatar
+                  src={userAvatar}
+                  alt="Ảnh đại diện"
+                  onError={() => setAvatarFailed(true)}
+                />
               ) : (
-                <AccountFallback>
-                  <UserOutlined />
+                <AccountFallback aria-label={`Ảnh đại diện ${accountInitial}`}>
+                  {accountInitial}
                 </AccountFallback>
               )}
               {user?.access_token ? (
